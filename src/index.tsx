@@ -17,6 +17,7 @@ import {
 
 import { configs } from './configs.ts';
 import { App } from '@src/app';
+import { catalogFeature } from '@src/features/catalog/injections.ts';
 
 /**
  * Создание DI контейнера с сервисами, фичами, настройками и прочими зависимостями приложения.
@@ -34,6 +35,7 @@ export default async function createSolutions(envPatch: Patch<Env> = {}): Promis
     .set(i18nService)
     .set(logService)
     .set(dumpService)
+    .set(catalogFeature)
     .set({
       token: RENDER_COMPONENT,
       depends: { router: ROUTER_SERVICE },
