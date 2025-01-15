@@ -2,6 +2,7 @@ import { memo, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 import { Head, ModalsContainer } from 'react-solution';
 import CatalogPage from '../features/catalog/page'
+import UsersPage from '../features/users/page'
 
 export const App = memo(() => {
   return (
@@ -13,7 +14,8 @@ export const App = memo(() => {
       </Head>
       <Suspense fallback={<div>Подождите...</div>}>
         <Routes>
-          <Route path="/" index element={<CatalogPage/>} />
+          {/* <Route path="/" index element={<CatalogPage/>} /> */}
+          <Route path="/" index element={<UsersPage/>} />
           <Route path="*" element={<div>Страница не найдена</div>} />
         </Routes>
         <ModalsContainer />

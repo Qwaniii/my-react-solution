@@ -9,13 +9,15 @@ import { useParams } from "react-router";
 function CatalogPage() {
 
     const articles = useSolution(ARTICLES_STORE);
+    
+    console.log(articles)
 
     const { categoryId } = useParams<{ categoryId: string }>();
 
     useInit(
         async () => {
           // Инициализация параметров каталога
-          await articles.initParams({category: categoryId});
+          await articles.initParams({});
         },
         [],
         { ssr: 'articles.init' },
