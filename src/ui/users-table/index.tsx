@@ -2,6 +2,10 @@ import React, { memo, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
 import { Button, Form, Radio, Space, Switch, Table } from 'antd';
+import { useExternalState, useSolutionMap } from 'react-solution';
+import { USERS_STORE } from '@src/features/users/store/token';
+import { TUserData, TUserProfile } from '@src/features/users/store/types';
+import Item from '@src/content/Item';
 
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
@@ -11,37 +15,51 @@ type ExpandableConfig<T extends object> = TableProps<T>['expandable'];
 type TableRowSelection<T extends object> = TableProps<T>['rowSelection'];
 
 interface DataType {
-  key: number;
-  name: string;
-  age: number;
-  address: string;
-  description: string;
+  _id: string;
+  username: string;
+  email: string;
+  profile?: TUserProfile
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'ID',
+    dataIndex: '_id',
+    key: '_id',
+    sorter: (a, b) =>
+      a._id &&
+      a._id > b._id &&
+      b._id
+        ? 1
+        : -1,
+    // defaultSortOrder: "descend",
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    sorter: (a, b) => a.age - b.age,
+    title: 'Логин',
+    dataIndex: 'username',
+    key: 'username',
+    sorter: (a, b) =>
+      a.username &&
+      a.username > b.username &&
+      b.username
+        ? 1
+        : -1,
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    filters: [
-      {
-        text: 'London',
-        value: 'London',
-      },
-      {
-        text: 'New York',
-        value: 'New York',
-      },
-    ],
-    onFilter: (value, record) => record.address.indexOf(value as string) === 0,
+    title: 'Почта',
+    dataIndex: 'email',
+    key: 'email'
+    // filters: [
+    //   {
+    //     text: 'London',
+    //     value: 'London',
+    //   },
+    //   {
+    //     text: 'New York',
+    //     value: 'New York',
+    //   },
+    // ],
+    // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
   },
   {
     title: 'Action',
@@ -61,17 +79,14 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data = Array.from({ length: 10 }).map<DataType>((_, i) => ({
-  key: i,
-  name: 'John Brown',
-  age: Number(`${i}2`),
-  address: `New York No. ${i} Lake Park`,
-  description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
-}));
 
-const defaultExpandable: ExpandableConfig<DataType> = {
-  expandedRowRender: (record: DataType) => <p>{record.description}</p>,
-};
+
+
+
+
+// const defaultExpandable: ExpandableConfig<DataType> = {
+//   expandedRowRender: (record: DataType) => {},
+// };
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -79,13 +94,12 @@ type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
 const UsersTable: React.FC = () => {
+
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<SizeType>('large');
-  const [expandable, setExpandable] = useState<ExpandableConfig<DataType>>(defaultExpandable);
-  const [showTitle, setShowTitle] = useState(false);
+  // const [expandable, setExpandable] = useState<ExpandableConfig<DataType>>(defaultExpandable);
   const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
   const [rowSelection, setRowSelection] = useState<TableRowSelection<DataType> | undefined>({});
   const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState<string>('unset');
@@ -97,6 +111,15 @@ const UsersTable: React.FC = () => {
 
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
+
+  const { users } = useSolutionMap({
+    users: USERS_STORE,
+  });
+
+  const usersState = useExternalState(users.state);
+
+  usersState.data.items.map(item => item.key = item._id)
+
 
   const handleChange: OnChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -138,7 +161,7 @@ const UsersTable: React.FC = () => {
     bordered,
     loading,
     size,
-    expandable,
+    // expandable,
     showHeader,
     rowSelection,
     scroll,
@@ -147,19 +170,15 @@ const UsersTable: React.FC = () => {
 
   return (
     <>
-      <Space style={{ marginBottom: 16 }}>
-        <Button onClick={setAgeSort}>Sort age</Button>
-        <Button onClick={clearFilters}>Clear filters</Button>
-        <Button onClick={clearAll}>Clear filters and sorters</Button>
-      </Space>
       <Table<DataType>
         {...tableProps}
         pagination={{ position: [top, bottom] }}
         columns={tableColumns}
-        dataSource={hasData ? data : []}
+        dataSource={hasData ? usersState.data.items : []}
         scroll={scroll}
         onChange={handleChange}
       />
+
     </>
   );
 };

@@ -6,6 +6,7 @@ import { USERS_STORE } from "../store/token";
 import Users from "../containers/users";
 import {Card, Table} from 'antd'
 import UsersTable from "@src/ui/users-table";
+import LayoutAdmin from "@src/ui/layout-admin";
 
 function UsersPage() {
 
@@ -25,8 +26,7 @@ function UsersPage() {
     
     return(
         <PageLayout>
-            <Head title='Каталог пользователей'/>
-            <UsersTable/>
+            <LayoutAdmin/>
         </PageLayout>
     )
 }

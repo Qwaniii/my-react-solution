@@ -11,6 +11,7 @@ export interface TUserItem {
   username: string;
   email: string;
   profile: TUserProfile
+  key?: string
 };
 
 export interface TUserData {

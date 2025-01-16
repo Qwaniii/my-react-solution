@@ -6,6 +6,7 @@ import { DataParamsState, type DefaultConfig } from 'react-solution';
 import type { RouterService } from 'react-solution';
 import type { UsersApi } from '@src/features/users/api';
 import { TUserData, TUserParams } from './types.js';
+import Item from '@src/content/Item/index.js';
 
 /**
  * Детальная информация о пользователе
@@ -58,7 +59,7 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
    */
   protected override apiParams(params: TUserParams): FindQuery {
     const apiParams = mc.patch(super.apiParams(params), {
-      fields: `items(*,category(title),madeIn(title)), count`,
+      fields: `items(*), count`,
       filter: {
         category: params.category,
         query: params.query,
@@ -79,8 +80,8 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
    */
   protected override async loadData(apiParams: FindQuery): Promise<TUserData> {
     // const response = await this.depends.articlesApi.findMany(apiParams);
-    const response = await this.depends.usersApi.findMany({});
+    let response = await this.depends.usersApi.findMany({limit: 1000});
     // Установка полученных данных в состояние
-    return response.data.result;
+    return response.data.result
   }
 }

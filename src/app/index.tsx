@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router';
 import { Head, ModalsContainer } from 'react-solution';
 import CatalogPage from '../features/catalog/page'
 import UsersPage from '../features/users/page'
+import '../style.less'
 
 export const App = memo(() => {
   return (
