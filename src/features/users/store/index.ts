@@ -32,12 +32,13 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
   }
 
   override defaultState() {
-    return mc.patch(super.defaultState(), {
+    return mc.merge(super.defaultState(), {
       data: {
         items: [],
         count: 0,
       },
       params: {
+        limit: 10,
         category: '',
         query: '',
       },
@@ -80,7 +81,7 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
    */
   protected override async loadData(apiParams: FindQuery): Promise<TUserData> {
     // const response = await this.depends.articlesApi.findMany(apiParams);
-    let response = await this.depends.usersApi.findMany({limit: 1000});
+    const response = await this.depends.usersApi.findMany({});
     // Установка полученных данных в состояние
     return response.data.result
   }
