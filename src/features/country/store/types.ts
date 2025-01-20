@@ -10,10 +10,11 @@ export interface TCountryItem {
   _id: string;
   title: string;
   code: string;
+  key?: string
 };
 
 export interface TCountryData {
-  list: [];
+  items: TCountryItem[];
   count: number;
 }
 

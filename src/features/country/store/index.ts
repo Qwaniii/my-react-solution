@@ -33,8 +33,10 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
 
   override defaultState() {
     return mc.merge(super.defaultState(), {
-      list: [],
-      count: 0,
+      data: {
+        items: [],
+        count: 0,
+      },
       params: {
         limit: 10,
         query: '',
@@ -57,7 +59,7 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
    */
   protected override apiParams(params: TCountryParams): FindQuery {
     const apiParams = mc.merge(super.apiParams(params), {
-      fields: `items(*, _id,title,code,count`,
+      fields: `items(*, _id,title,code),count`,
       filter: {
         query: params.query,
       },
@@ -76,7 +78,6 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
    * @param apiParams Параметры АПИ запроса
    */
   protected override async loadData(apiParams: FindQuery): Promise<TCountryData> {
-    // const response = await this.depends.articlesApi.findMany(apiParams);
     const response = await this.depends.countriesApi.findMany(apiParams);
     // Установка полученных данных в состояние
     return response.data.result

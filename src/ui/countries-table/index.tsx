@@ -6,6 +6,7 @@ import { useExternalState, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import { TUserData, TUserProfile } from '@src/features/users/store/types';
 import Item from '@src/content/Item';
+import { COUNTRIES_STORE } from '@src/features/country/store/token';
 
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
@@ -16,9 +17,9 @@ type TableRowSelection<T extends object> = TableProps<T>['rowSelection'];
 
 interface DataType {
   _id: string;
-  username: string;
-  email: string;
-  profile?: TUserProfile
+  code: string;
+  title: string;
+  key?: string
 }
 
 const columns: ColumnsType<DataType> = [
@@ -35,20 +36,20 @@ const columns: ColumnsType<DataType> = [
     // defaultSortOrder: "descend",
   },
   {
-    title: 'Логин',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'Страна',
+    dataIndex: 'title',
+    key: 'title',
     sorter: (a, b) =>
-      a.username &&
-      a.username > b.username &&
-      b.username
+      a.title &&
+      a.title > b.title &&
+      b.title
         ? 1
         : -1,
   },
   {
-    title: 'Почта',
-    dataIndex: 'email',
-    key: 'email'
+    title: 'Код',
+    dataIndex: 'code',
+    key: 'code'
     // filters: [
     //   {
     //     text: 'London',
@@ -60,22 +61,6 @@ const columns: ColumnsType<DataType> = [
     //   },
     // ],
     // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    sorter: true,
-    render: () => (
-      <Space size="middle">
-        <a>Delete</a>
-        <a>
-          <Space>
-            More actions
-            <DownOutlined />
-          </Space>
-        </a>
-      </Space>
-    ),
   },
 ];
 
@@ -93,7 +78,7 @@ type Filters = Parameters<OnChange>[1];
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
-const UsersTable: React.FC = () => {
+const CountriesTable: React.FC = () => {
 
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -110,17 +95,17 @@ const UsersTable: React.FC = () => {
   const [xScroll, setXScroll] = useState<string>('unset');
 
 
-  const { users } = useSolutionMap({
-    users: USERS_STORE,
+  const { countries } = useSolutionMap({
+    countries: COUNTRIES_STORE,
   });
 
-  const usersState = useExternalState(users.state);
+  const countriesState = useExternalState(countries.state);
 
-  usersState.data.items.map(item => item.key = item._id)
+  countriesState.data.items.map(item => item.key = item._id)
 
   const handleChange: OnChange = async (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
-    await users.setParams({page: pagination.current});
+    await countries.setParams({page: pagination.current});
   }
 
   const scroll: { x?: number | string; y?: number | string } = {};
@@ -155,12 +140,14 @@ const UsersTable: React.FC = () => {
       <Table<DataType>
         {...tableProps}
         pagination={{ 
-          current: usersState.params.page,
-          total: usersState.data.count,
+          // position: [top, bottom],
+          current: countriesState.params.page,
+          total: countriesState.data.count,
+
         }}
-        loading={{indicator: <Spin/>, spinning: usersState.wait ? true : false}}
+        loading={{indicator: <Spin/>, spinning: countriesState.wait ? true : false}}
         columns={tableColumns}
-        dataSource={hasData ? usersState.data.items : []}
+        dataSource={hasData ? countriesState.data.items : []}
         scroll={scroll}
         onChange={handleChange}
       />
@@ -169,4 +156,4 @@ const UsersTable: React.FC = () => {
   );
 };
 
-export default memo(UsersTable);
+export default memo(CountriesTable);

@@ -1,6 +1,10 @@
 import React, { memo } from 'react';
 import { Button, Form, Input } from 'antd';
 import type { FormItemProps } from 'antd';
+import { COUNTRIES_STORE } from '@src/features/country/store/token';
+import { useSolution } from 'react-solution';
+import { COUNTRIES_API } from '@src/features/country/api/token';
+import { useNavigate } from 'react-router';
 
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -30,27 +34,41 @@ const MyFormItem = ({ name, ...props }: FormItemProps) => {
 };
 
 const NewCountry: React.FC = () => {
+
+  const navigate = useNavigate()
   
-  const onFinish = (value: object) => {
-    console.log(value);
+  const countries = useSolution(COUNTRIES_API);
+
+  const onFinish = (data: any) => {
+    countries.create({data})
+    console.log({data})
+    navigate('/countries')
   };
 
-  return (
-    <Form name="form_item_path" layout="vertical" onFinish={onFinish}>
-      <MyFormItemGroup prefix={['user']}>
-        <MyFormItemGroup prefix={['name']}>
-          <MyFormItem name="firstName" label="First Name">
-            <Input />
-          </MyFormItem>
-          <MyFormItem name="lastName" label="Last Name">
-            <Input />
-          </MyFormItem>
-        </MyFormItemGroup>
 
-        <MyFormItem name="age" label="Age">
-          <Input />
-        </MyFormItem>
-      </MyFormItemGroup>
+        
+    
+    
+        // useInit(
+        //     async () => {
+        //       // Инициализация параметров каталога
+        //       await countries.initParams({});
+        //     },
+        //     [],
+        //     { ssr: 'users.init' },
+        //   );
+
+  return (
+    <Form clearOnDestroy name="form_item_path" layout="vertical" onFinish={onFinish}>
+          <MyFormItem name="title" label="Название">
+            <Input />
+          </MyFormItem>
+          <MyFormItem name="code" label="Код">
+            <Input />
+          </MyFormItem>
+          {/* <MyFormItem name="age" label="Age">
+            <Input />
+          </MyFormItem> */}
 
       <Button type="primary" htmlType="submit">
         Создать

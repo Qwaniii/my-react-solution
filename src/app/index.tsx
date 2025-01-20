@@ -5,6 +5,7 @@ import CatalogPage from '../features/catalog/page'
 import UsersPage from '../features/users/page'
 import CountriesPage from '../features/country/page'
 import '../style.less'
+import AddCountry from '@src/features/country/containers/add-country';
 
 export const App = memo(() => {
   return (
@@ -18,7 +19,8 @@ export const App = memo(() => {
         <Routes>
           {/* <Route path="/" index element={<CatalogPage/>} /> */}
           <Route path="/" index element={<UsersPage/>} />
-          {/* <Route path="/add-country" element={<CountriesPage />} /> */}
+          <Route path="/countries" element={<CountriesPage />} />
+          <Route path="/add-country" element={<AddCountry />} />
           <Route path="*" element={<div>Страница не найдена</div>} />
         </Routes>
         <ModalsContainer />

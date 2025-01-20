@@ -23,4 +23,5 @@ export interface TUserParams extends DefaultParams {
   // Фильтр по категории (идентификатору)
   category: string;
   query: string;
+  email: string;
 }
