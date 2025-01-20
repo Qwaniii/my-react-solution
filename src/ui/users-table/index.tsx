@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
-import { Button, Form, Radio, Space, Switch, Table } from 'antd';
+import { Button, Form, Radio, Space, Spin, Switch, Table } from 'antd';
 import { useExternalState, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import { TUserData, TUserProfile } from '@src/features/users/store/types';
@@ -120,28 +120,10 @@ const UsersTable: React.FC = () => {
 
   usersState.data.items.map(item => item.key = item._id)
 
-
-  const handleChange: OnChange = (pagination, filters, sorter) => {
+  const handleChange: OnChange = async (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
-    setFilteredInfo(filters);
-    setSortedInfo(sorter as Sorts);
-  };
-
-  const clearFilters = () => {
-    setFilteredInfo({});
-  };
-
-  const clearAll = () => {
-    setFilteredInfo({});
-    setSortedInfo({});
-  };
-
-  const setAgeSort = () => {
-    setSortedInfo({
-      order: 'descend',
-      columnKey: 'age',
-    });
-  };
+    await users.setParams({page: pagination.current});
+  }
 
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
@@ -168,11 +150,19 @@ const UsersTable: React.FC = () => {
     tableLayout: tableLayout === 'unset' ? undefined : (tableLayout as TableProps['tableLayout']),
   };
 
+
+
   return (
     <>
       <Table<DataType>
         {...tableProps}
-        pagination={{ position: [top, bottom] }}
+        pagination={{ 
+          // position: [top, bottom],
+          current: usersState.params.page,
+          total: usersState.data.count,
+
+        }}
+        loading={{indicator: <Spin/>, spinning: usersState.wait ? true : false}}
         columns={tableColumns}
         dataSource={hasData ? usersState.data.items : []}
         scroll={scroll}

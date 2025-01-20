@@ -1,8 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { Children, memo, PropsWithChildren, useState } from 'react';
 import {
   AndroidOutlined,
   AppleOutlined,
   FileOutlined,
+  PictureFilled,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -10,6 +11,7 @@ import type { MenuProps } from 'antd';
 import { Anchor, Breadcrumb, Layout, Menu, Tabs, theme } from 'antd';
 import UsersTable from '../users-table';
 import Search from 'antd/es/input/Search';
+import Typography from 'antd/es/typography/Typography';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,10 +37,11 @@ const items: MenuItem[] = [
     getItem('Роли', '4'),
   ]),
   getItem('Каталог', 'sub2', <TeamOutlined />, [getItem('Каталог 1', '6'), getItem('Каталог 2', '8')]),
-  getItem('Отчеты', '9', <FileOutlined />),
+  getItem('Страны', '9', <PictureFilled />, [getItem('Все страны', '11'), getItem('Добавить страну', '12')]),
+  getItem('Отчеты', '10', <FileOutlined />),
 ];
 
-const LayoutAdmin: React.FC = () => {
+const LayoutAdmin: React.FC<PropsWithChildren> = ({children}) => {
   
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -57,9 +60,7 @@ const LayoutAdmin: React.FC = () => {
             <Breadcrumb.Item>Главная</Breadcrumb.Item>
             <Breadcrumb.Item>Пользователи</Breadcrumb.Item>
           </Breadcrumb>
-          <Header style={{ padding: 0, background: colorBgContainer, fontSize: '36px', fontWeight: 'bold' }}>
-            Пользователи
-          </Header>
+          <Typography style={{ padding: 0, fontSize: '36px', fontWeight: 'bold' }}>Пользователи</Typography>
           <Search
             style={{ width: 320 }}
             placeholder="Поиск..."
@@ -92,7 +93,7 @@ const LayoutAdmin: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-          <UsersTable/>
+          {children}
           </div>
         </Content>
       </Layout>

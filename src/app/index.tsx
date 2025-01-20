@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router';
 import { Head, ModalsContainer } from 'react-solution';
 import CatalogPage from '../features/catalog/page'
 import UsersPage from '../features/users/page'
+import CountriesPage from '../features/country/page'
 import '../style.less'
 
 export const App = memo(() => {
@@ -17,6 +18,7 @@ export const App = memo(() => {
         <Routes>
           {/* <Route path="/" index element={<CatalogPage/>} /> */}
           <Route path="/" index element={<UsersPage/>} />
+          {/* <Route path="/add-country" element={<CountriesPage />} /> */}
           <Route path="*" element={<div>Страница не найдена</div>} />
         </Routes>
         <ModalsContainer />

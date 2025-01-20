@@ -5,7 +5,10 @@ export const configs = [
     // Обычно хост на апи относительный и используется прокси для устранения CORS
     // Но в режиме рендера на сервере необходимо указать полный адрес к АПИ
     baseURL: env.SSR ? env.API_URL : '',
-    //headers: {},
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Token': '5b17129b9c6ea2ad562480d9cea55c1e6d51ca97893047cfe2f92efec4895f73'
+    },
     //auth:{} base auth
   })),
 

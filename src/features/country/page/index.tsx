@@ -1,25 +1,25 @@
 import { memo } from "react"
 import { useInit, useSolution } from "react-solution";
-import { USERS_STORE } from "../store/token";
+import { COUNTRIES_STORE } from "../store/token";
 import Users from "../containers/users";
 import LayoutAdmin from "@src/ui/layout-admin";
 import UsersTable from "@src/ui/users-table";
 
-function UsersPage() {
+function CountriesPage() {
 
-    const users = useSolution(USERS_STORE);
+    const countries = useSolution(COUNTRIES_STORE);
     
 
 
     useInit(
         async () => {
           // Инициализация параметров каталога
-          await users.initParams({});
+          await countries.initParams({});
         },
         [],
         { ssr: 'users.init' },
       );
-    console.log(users)
+    console.log(countries)
     
     return(
         <LayoutAdmin>
@@ -28,4 +28,4 @@ function UsersPage() {
     )
 }
 
-export default memo(UsersPage)
+export default memo(CountriesPage)

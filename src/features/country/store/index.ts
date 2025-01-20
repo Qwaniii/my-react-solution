@@ -4,18 +4,18 @@ import type { FindQuery, LogInterface, Patch } from 'react-solution';
 import { exclude } from 'react-solution';
 import { DataParamsState, type DefaultConfig } from 'react-solution';
 import type { RouterService } from 'react-solution';
-import type { UsersApi } from '@src/features/users/api';
-import { TUserData, TUserParams } from './types.js';
+import type { CountriesApi } from '@src/features/country/api';
+import { TCountryData, TCountryParams } from './types.js';
 import Item from '@src/content/Item/index.js';
 
 /**
  * Детальная информация о пользователе
  */
-export class UsersStore extends DataParamsState<TUserData, TUserParams> {
+export class CountriesStore extends DataParamsState<TCountryData, TCountryParams> {
   override defaultConfig() {
     return {
       ...super.defaultConfig(),
-      queryParamsGroup: 'users',
+      queryParamsGroup: 'countries',
     };
   }
 
@@ -24,7 +24,7 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
       env: Env;
       config?: Patch<DefaultConfig>;
       router: RouterService;
-      usersApi: UsersApi;
+      countriesApi: CountriesApi;
       logger: LogInterface;
     },
   ) {
@@ -33,14 +33,8 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
 
   override defaultState() {
     return mc.merge(super.defaultState(), {
-      data: {
-        items: [],
-        allCount: 0,
-        confirmCount: 0,
-        count: 0,
-        newCount: 0,
-        rejectCount: 0
-      },
+      list: [],
+      count: 0,
       params: {
         limit: 10,
         query: '',
@@ -61,9 +55,9 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
    * Параметры для АПИ запроса
    * @param params Параметры состояния
    */
-  protected override apiParams(params: TUserParams): FindQuery {
+  protected override apiParams(params: TCountryParams): FindQuery {
     const apiParams = mc.merge(super.apiParams(params), {
-      fields: `items(*, roles(title, name)),count,allCount,newCount,confirmCount,rejectCount`,
+      fields: `items(*, _id,title,code,count`,
       filter: {
         query: params.query,
       },
@@ -81,9 +75,9 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
    * Загрузка данных
    * @param apiParams Параметры АПИ запроса
    */
-  protected override async loadData(apiParams: FindQuery): Promise<TUserData> {
+  protected override async loadData(apiParams: FindQuery): Promise<TCountryData> {
     // const response = await this.depends.articlesApi.findMany(apiParams);
-    const response = await this.depends.usersApi.findMany(apiParams);
+    const response = await this.depends.countriesApi.findMany(apiParams);
     // Установка полученных данных в состояние
     return response.data.result
   }

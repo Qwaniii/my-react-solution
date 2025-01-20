@@ -19,6 +19,7 @@ import { configs } from './configs.ts';
 import { App } from '@src/app';
 import { catalogFeature } from '@src/features/catalog/injections.ts';
 import { usersFeature } from '@src/features/users/injections.ts';
+import { countryFeature } from '@src/features/country/injections.ts';
 
 /**
  * Создание DI контейнера с сервисами, фичами, настройками и прочими зависимостями приложения.
@@ -38,6 +39,7 @@ export default async function createSolutions(envPatch: Patch<Env> = {}): Promis
     .set(dumpService)
     .set(catalogFeature)
     .set(usersFeature)
+    .set(countryFeature)
     .set({
       token: RENDER_COMPONENT,
       depends: { router: ROUTER_SERVICE },
