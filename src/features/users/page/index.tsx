@@ -1,9 +1,8 @@
 import { memo } from "react"
 import { useInit, useSolution } from "react-solution";
 import { USERS_STORE } from "../store/token";
-import Users from "../containers/users";
-import LayoutAdmin from "@src/ui/layout-admin";
 import UsersTable from "@src/ui/users-table";
+import LayoutUsers from "@src/ui/layout-users";
 
 function UsersPage() {
 
@@ -22,9 +21,9 @@ function UsersPage() {
     console.log(users)
     
     return(
-        <LayoutAdmin>
+        <LayoutUsers>
           <UsersTable/>
-        </LayoutAdmin>
+        </LayoutUsers>
     )
 }
 

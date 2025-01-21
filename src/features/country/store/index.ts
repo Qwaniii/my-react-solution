@@ -6,7 +6,6 @@ import { DataParamsState, type DefaultConfig } from 'react-solution';
 import type { RouterService } from 'react-solution';
 import type { CountriesApi } from '@src/features/country/api';
 import { TCountryData, TCountryParams } from './types.js';
-import Item from '@src/content/Item/index.js';
 
 /**
  * Детальная информация о пользователе
@@ -40,8 +39,9 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
       params: {
         limit: 10,
         query: '',
-      },
-    });
+        sort: ''
+    }});
+  
   }
 
   /**
@@ -62,13 +62,15 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
       fields: `items(*, _id,title,code),count`,
       filter: {
         query: params.query,
+        sort: params.sort == 'all' ? '' : params.sort
       },
     });
 
     return exclude(apiParams, {
       skip: 0,
       filter: {
-        query: ''
+        query: '',
+        sort: ''
       }
     });
   }

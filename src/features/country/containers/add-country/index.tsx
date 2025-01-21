@@ -1,8 +1,9 @@
-import LayoutAdmin from "@src/ui/layout-admin";
+import LayoutAdmin from "@src/ui/layout-users";
 import NewCountry from "@src/ui/new-country";
 import { memo } from "react";
 import { COUNTRIES_STORE } from "../../store/token";
 import { useInit, useSolution } from "react-solution";
+import LayoutNewcountry from "@src/ui/layout-newcountry";
 
 function AddCountry() {
 
@@ -21,9 +22,9 @@ function AddCountry() {
       //   );
     
     return(
-        <LayoutAdmin>
+        <LayoutNewcountry>
           <NewCountry/>
-        </LayoutAdmin>
+        </LayoutNewcountry>
     )
 }
 

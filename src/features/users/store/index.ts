@@ -44,7 +44,8 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
       params: {
         limit: 10,
         query: '',
-        email: ''
+        email: '',
+        status: ''
       },
     });
   }
@@ -67,14 +68,16 @@ export class UsersStore extends DataParamsState<TUserData, TUserParams> {
       fields: `items(*, roles(title, name)),count,allCount,newCount,confirmCount,rejectCount`,
       filter: {
         query: params.query,
-        email: params.email
+        email: params.email,
+        status: params.status =='all' ? '' : params.status
       },
     });
 
     return exclude(apiParams, {
       skip: 0,
       filter: {
-        query: ''
+        query: '',
+        status: ''
       }
     });
   }

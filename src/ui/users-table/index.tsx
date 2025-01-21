@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
+import { BarsOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
 import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
 import { Button, Form, Radio, Space, Spin, Switch, Table } from 'antd';
 import { useExternalState, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
-import { TUserData, TUserProfile } from '@src/features/users/store/types';
+import { TUserData, TUserProfile, TUserRoles } from '@src/features/users/store/types';
 import Item from '@src/content/Item';
 
 type SizeType = TableProps['size'];
@@ -62,16 +62,48 @@ const columns: ColumnsType<DataType> = [
     // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
   },
   {
-    title: 'Action',
+    title: 'Статус',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text: string) => {
+      switch (text) {
+        case 'new':
+          return <div>Новый</div>;
+        case 'reject':
+          return <div style={{ color: 'red'}}>Отклонен</div>;
+        case 'confirm':
+          return <div style={{ color: 'green'}}>Подтвержден</div>;
+        default:
+          <div>error</div>
+          break;
+    }
+  }
+},
+  {
+    title: 'Роль',
+    dataIndex: 'roles',
+    key: `roles`,
+    render: (roles: TUserRoles[]) => (
+      <>
+        {roles.map(role => {
+          return (
+            <div style={{color: role.name === 'admin' ? 'red' : 'blue'}}>{role.title}</div>
+          )
+        })}
+      </>
+    )
+
+  },
+  {
+    title: 'Действие',
     key: 'action',
     sorter: true,
     render: () => (
       <Space size="middle">
-        <a>Delete</a>
+        <a><DeleteOutlined /></a>
         <a>
           <Space>
-            More actions
-            <DownOutlined />
+            <BarsOutlined />
           </Space>
         </a>
       </Space>
@@ -79,32 +111,18 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-
-
-
-
-
-// const defaultExpandable: ExpandableConfig<DataType> = {
-//   expandedRowRender: (record: DataType) => {},
-// };
-
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
-type Filters = Parameters<OnChange>[1];
 type GetSingle<T> = T extends (infer U)[] ? U : never;
-type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
 const UsersTable: React.FC = () => {
 
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<SizeType>('large');
-  // const [expandable, setExpandable] = useState<ExpandableConfig<DataType>>(defaultExpandable);
   const [showHeader, setShowHeader] = useState(true);
   const [rowSelection, setRowSelection] = useState<TableRowSelection<DataType> | undefined>({});
   const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState<string>('unset');
-  const [top, setTop] = useState<TablePaginationPosition>('none');
-  const [bottom, setBottom] = useState<TablePaginationPosition>('bottomRight');
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState<string>('unset');
@@ -113,9 +131,7 @@ const UsersTable: React.FC = () => {
   const { users } = useSolutionMap({
     users: USERS_STORE,
   });
-
   const usersState = useExternalState(users.state);
-
   usersState.data.items.map(item => item.key = item._id)
 
   const handleChange: OnChange = async (pagination, filters, sorter) => {
