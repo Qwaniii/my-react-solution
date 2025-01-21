@@ -26,7 +26,6 @@ const NewCountry: React.FC = () => {
   const navigate = useNavigate()
   
   const countries = useSolution(COUNTRIES_API);
-  const countriesState = useSolution(COUNTRIES_STORE);
 
   const onFinish = async (data: any) => {
     const res = await countries.create({data})

@@ -1,8 +1,6 @@
 import { memo } from "react"
 import { useInit, useSolution } from "react-solution";
 import { COUNTRIES_STORE } from "../store/token";
-import LayoutAdmin from "@src/ui/layout-users";
-import UsersTable from "@src/ui/users-table";
 import CountriesTable from "@src/ui/countries-table";
 import LayoutCountries from "@src/ui/layout-countries";
 
