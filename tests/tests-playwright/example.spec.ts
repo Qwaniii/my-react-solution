@@ -1,19 +1,19 @@
 import { test, expect } from 'playwright/test';
 
-test('has title', async ({ page }) => {
+test('send data', async ({ page }) => {
 
-  await page.goto('/add-country');
+  await page.goto('./add-country');
 
   //проверяем наличие текста
-  await expect(page.getByText('Страны')).toBeVisible();
+  await expect(page.getByRole('menu').getByText('Страны')).toBeVisible();
   
   // Заполняем название страны
-  await page.getByLabel('Название').fill('Амазония');
+  await page.getByLabel('Название').fill('Туземания');
   
   // Заполняем код страны
-  await page.getByLabel('Код').fill('Y}');
+  await page.getByLabel('Код').fill('S:');
 
   //нажимаем на кнопку "Создать"
-  await page.getByRole('button', { name: /submit/i }).click();
+  await page.getByRole('button').getByText('Создать').click();
 });
 
