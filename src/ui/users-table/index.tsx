@@ -87,7 +87,7 @@ const columns: ColumnsType<DataType> = [
       <>
         {roles.map(role => {
           return (
-            <div style={{color: role.name === 'admin' ? 'red' : 'blue'}}>{role.title}</div>
+            <div key={role._id} style={{color: role.name === 'admin' ? 'red' : 'blue'}}>{role.title}</div>
           )
         })}
       </>

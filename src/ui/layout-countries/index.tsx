@@ -13,7 +13,6 @@ import type { MenuProps, TabsProps } from 'antd';
 import { Layout, theme } from 'antd';
 import SearchForm from '@src/components/search-form';
 import { useExternalState, useSolution } from 'react-solution';
-import { USERS_STORE } from '@src/features/users/store/token';
 import SiderMenu from '@src/components/sider-menu';
 import Breadcrumbs from '@src/components/breadcrumbs';
 import PageTypography from '@src/components/page-typography';

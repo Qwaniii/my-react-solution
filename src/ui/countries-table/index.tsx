@@ -1,12 +1,14 @@
-import React, { memo, useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
-import { Button, Form, Radio, Space, Spin, Switch, Table } from 'antd';
-import { useExternalState, useSolutionMap } from 'react-solution';
+import React, { memo, useCallback, useState } from 'react';
+import { BarsOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import type { GetProp, MenuProps, RadioChangeEvent, TableProps } from 'antd';
+import { Button, Dropdown, Form, Radio, Space, Spin, Switch, Table } from 'antd';
+import { MODALS, useExternalState, useSolution, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import { TUserData, TUserProfile } from '@src/features/users/store/types';
 import Item from '@src/content/Item';
 import { COUNTRIES_STORE } from '@src/features/country/store/token';
+import { CONFIRM_MODAL } from '@src/features/modals/confirm/token';
+import { COUNTRIES_API } from '@src/features/country/api/token';
 
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
@@ -22,47 +24,26 @@ interface DataType {
   key?: string
 }
 
-const columns: ColumnsType<DataType> = [
+const items: MenuProps['items'] = [
   {
-    title: 'ID',
-    dataIndex: '_id',
-    key: '_id',
-    sorter: (a, b) =>
-      a._id &&
-      a._id > b._id &&
-      b._id
-        ? 1
-        : -1,
-    // defaultSortOrder: "descend",
+    label: (
+      <a>
+        Редактировать
+      </a>
+    ),
+    key: '0',
   },
   {
-    title: 'Страна',
-    dataIndex: 'title',
-    key: 'title',
-    sorter: (a, b) =>
-      a.title &&
-      a.title > b.title &&
-      b.title
-        ? 1
-        : -1,
-  },
-  {
-    title: 'Код',
-    dataIndex: 'code',
-    key: 'code'
-    // filters: [
-    //   {
-    //     text: 'London',
-    //     value: 'London',
-    //   },
-    //   {
-    //     text: 'New York',
-    //     value: 'New York',
-    //   },
-    // ],
-    // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
+    label: (
+      <a>
+        Удалить
+      </a>
+    ),
+    key: '1',
   },
 ];
+
+
 
 
 
@@ -99,6 +80,8 @@ const CountriesTable: React.FC = () => {
     countries: COUNTRIES_STORE,
   });
 
+  const countriesApi = useSolution(COUNTRIES_API)
+
   const countriesState = useExternalState(countries.state);
 
   countriesState.data.items.map(item => item.key = item._id)
@@ -108,6 +91,31 @@ const CountriesTable: React.FC = () => {
     await countries.setParams({page: pagination.current});
   }
 
+  
+  const modals = useSolution(MODALS);
+
+  const callbacks = {
+    openConfirm: useCallback(async (_id: any, title: string) => {
+      const result = await modals.open(CONFIRM_MODAL, {
+        title: 'Подтвердите действие!',
+        message:
+          `Вы действительно хотите удалить ${title}`,
+      });
+      console.log('confirm', result, _id);
+      if(result) {
+        const deleteId: any = await countriesApi.delete({id: _id})
+        console.log(deleteId.data.result._id)
+        countries.setDump({
+          ...countries.getDump(),
+          data: 
+          {items: countriesState.data.items.filter(item => item._id !== deleteId.data.result._id)}
+        })
+        // countriesState.data.items.filter(item => item._id !== deleteId.result._id)
+      }
+        
+    }, []),
+  }
+
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
     scroll.y = 240;
@@ -115,6 +123,55 @@ const CountriesTable: React.FC = () => {
   if (xScroll !== 'unset') {
     scroll.x = '100vw';
   }
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: 'ID',
+      dataIndex: '_id',
+      key: '_id',
+    },
+    {
+      title: 'Страна',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Код',
+      dataIndex: 'code',
+      key: 'code'
+      // filters: [
+      //   {
+      //     text: 'London',
+      //     value: 'London',
+      //   },
+      //   {
+      //     text: 'New York',
+      //     value: 'New York',
+      //   },
+      // ],
+      // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
+    },
+    {
+        title: 'Действие',
+        key: 'action',
+        render: (_, record) => (
+          <Space size="middle">
+            <a onClick={() => callbacks.openConfirm(record._id, record.title)}><DeleteOutlined /></a>
+            <a>
+              <Space>
+                <Dropdown menu={{ items }} trigger={['click']}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <BarsOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </Space>
+            </a>
+          </Space>
+        ),
+    }
+  ];
 
   const tableColumns = columns.map((item) => ({ ...item, ellipsis }));
   if (xScroll === 'fixed') {
@@ -132,6 +189,7 @@ const CountriesTable: React.FC = () => {
     scroll,
     tableLayout: tableLayout === 'unset' ? undefined : (tableLayout as TableProps['tableLayout']),
   };
+
 
 
 

@@ -15,7 +15,7 @@ export interface TCountryItem {
 
 export interface TCountryData {
   items: TCountryItem[];
-  count: number;
+  count?: number;
 }
 
 export interface TCountryParams extends DefaultParams {

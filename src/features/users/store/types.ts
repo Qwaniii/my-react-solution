@@ -9,6 +9,7 @@ export type TUserProfile = {
 export type TUserRoles = {
   name: string;
   title: string;
+  _id?: string
 }
 
 export interface TUserItem {
