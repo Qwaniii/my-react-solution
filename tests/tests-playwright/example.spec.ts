@@ -2,6 +2,10 @@ import { test, expect } from 'playwright/test';
 
 test('send data', async ({ page }) => {
 
+  // await test.step('Заходим на страинцу', () => {
+
+  // })
+
   await page.goto('./add-country');
 
   //проверяем наличие текста

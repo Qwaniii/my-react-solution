@@ -4,7 +4,7 @@ export default defineConfig({
   use: {
 
     // All requests we send go to this API endpoint.
-    baseURL: 'http://localhost:8053/',
+    baseURL: 'http://localhost:8052/',
     // baseURL: 'http://www.ya.ru',
 
     extraHTTPHeaders: {
@@ -30,11 +30,11 @@ export default defineConfig({
   ],
 
   // Запускаем devServer, перед тем как запустить тесты
-  webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:8053/',
-    reuseExistingServer: !process.env.CI,
-  },
+  // webServer: {
+  //   command: 'npm run start',
+  //   url: 'http://localhost:8060/',
+  //   reuseExistingServer: !process.env.CI,
+  // },
   
   reporter: 'html',
   outputDir: 'tests/test-results',
