@@ -22,7 +22,7 @@ import { COUNTRIES_STORE } from '@src/features/country/store/token';
 
 const { Content } = Layout;
 
-const LayoutNewCountry: React.FC<PropsWithChildren> = ({children}) => {
+const LayoutNewUser: React.FC<PropsWithChildren> = ({children}) => {
   
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -58,7 +58,7 @@ const items: MenuItem[] = [
 
   const breadcrumbPaths = [
     { label: 'Главная', link: '/' },
-    { label: 'Новая страна' },
+    { label: 'Новый пользователь' },
   ];
 
 
@@ -68,7 +68,7 @@ const items: MenuItem[] = [
       <Layout>
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumbs styled={{ margin: '16px 0' }} paths={breadcrumbPaths} />
-          <PageTypography title='Страны' desc='Добавление страны'/>
+          <PageTypography title='Пользователи' desc='Добавление пользователя'/>
           <div
             style={{
               minHeight: 360,
@@ -83,4 +83,4 @@ const items: MenuItem[] = [
   );
 };
 
-export default memo(LayoutNewCountry);
+export default memo(LayoutNewUser);

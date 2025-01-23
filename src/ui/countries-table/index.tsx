@@ -59,7 +59,11 @@ type Filters = Parameters<OnChange>[1];
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
-const CountriesTable: React.FC = () => {
+export type CountriesTableProps = {
+  onConfirm: (_id: any, title: string) => Promise<void>
+}
+
+const CountriesTable: React.FC<CountriesTableProps> = ({onConfirm}) => {
 
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -80,7 +84,6 @@ const CountriesTable: React.FC = () => {
     countries: COUNTRIES_STORE,
   });
 
-  const countriesApi = useSolution(COUNTRIES_API)
 
   const countriesState = useExternalState(countries.state);
 
@@ -92,29 +95,6 @@ const CountriesTable: React.FC = () => {
   }
 
   
-  const modals = useSolution(MODALS);
-
-  const callbacks = {
-    openConfirm: useCallback(async (_id: any, title: string) => {
-      const result = await modals.open(CONFIRM_MODAL, {
-        title: 'Подтвердите действие!',
-        message:
-          `Вы действительно хотите удалить ${title}`,
-      });
-      console.log('confirm', result, _id);
-      if(result) {
-        const deleteId: any = await countriesApi.delete({id: _id})
-        console.log(deleteId.data.result._id)
-        countries.setDump({
-          ...countries.getDump(),
-          data: 
-          {items: countriesState.data.items.filter(item => item._id !== deleteId.data.result._id)}
-        })
-        // countriesState.data.items.filter(item => item._id !== deleteId.result._id)
-      }
-        
-    }, []),
-  }
 
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
@@ -139,24 +119,13 @@ const CountriesTable: React.FC = () => {
       title: 'Код',
       dataIndex: 'code',
       key: 'code'
-      // filters: [
-      //   {
-      //     text: 'London',
-      //     value: 'London',
-      //   },
-      //   {
-      //     text: 'New York',
-      //     value: 'New York',
-      //   },
-      // ],
-      // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
     },
     {
         title: 'Действие',
         key: 'action',
         render: (_, record) => (
           <Space size="middle">
-            <a onClick={() => callbacks.openConfirm(record._id, record.title)}><DeleteOutlined /></a>
+            <a onClick={() => onConfirm(record._id, record.title)}><DeleteOutlined /></a>
             <a>
               <Space>
                 <Dropdown menu={{ items }} trigger={['click']}>

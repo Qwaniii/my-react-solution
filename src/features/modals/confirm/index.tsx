@@ -1,5 +1,6 @@
 import ModalLayout from '@src/ui/modal-layout';
 import SideLayout from '@src/ui/side-layout';
+import { Modal } from 'antd';
 import { memo, useCallback } from 'react';
 import { useTranslate } from 'react-solution';
 import type { ModalWithClose } from 'react-solution';
@@ -21,8 +22,8 @@ function ConfirmModal(props: ConfirmModalProps) {
       <h2>{props.title}</h2>
       <p>{props.message}</p>
       <SideLayout side="end">
-        <button onClick={callbacks.onSuccess}>{t('example-modals.ok')}</button>
-        <button onClick={callbacks.onCancel}>{t('example-modals.cancel')}</button>
+        <button onClick={callbacks.onSuccess}>Да</button>
+        <button onClick={callbacks.onCancel}>Отмена</button>
       </SideLayout>
     </ModalLayout>
   );

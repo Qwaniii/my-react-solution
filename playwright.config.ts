@@ -1,12 +1,17 @@
 import { defineConfig, devices } from 'playwright/test';
 export default defineConfig({
+
   use: {
+
     // All requests we send go to this API endpoint.
     baseURL: 'http://localhost:8053/',
     // baseURL: 'http://www.ya.ru',
+
     extraHTTPHeaders: {
+
       // We set this header per GitHub guidelines.
       'Content-Type': 'application/json',
+
       // Assuming personal access token available in the environment.
       'X-Token': '5b17129b9c6ea2ad562480d9cea55c1e6d51ca97893047cfe2f92efec4895f73'
     },
@@ -14,6 +19,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
 
     // Записывать tracelist после первой неудачной попытки
+
     trace: 'on-first-retry',
   },
   projects: [
@@ -29,6 +35,7 @@ export default defineConfig({
     url: 'http://localhost:8053/',
     reuseExistingServer: !process.env.CI,
   },
+  
   reporter: 'html',
   outputDir: 'tests/test-results',
   timeout: 30000,

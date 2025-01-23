@@ -1,6 +1,9 @@
 import React, { memo, useEffect, useRef } from 'react';
 import { cn as bem } from '@bem-react/classname';
 import './style.less';
+import {
+  CloseOutlined,
+} from '@ant-design/icons';
 
 interface Props {
   children?: React.ReactNode;
@@ -68,7 +71,7 @@ function ModalLayout(props: Props) {
     >
       <div className={cn('frame', { size })} ref={frame}>
         <div className={cn('content', { padding })}>
-          {buttonClose && <button className={cn('close')} onClick={callbacks.onClose}></button>}
+          {buttonClose && <CloseOutlined className={cn('close')} onClick={callbacks.onClose}/>}
           {props.children}
         </div>
       </div>

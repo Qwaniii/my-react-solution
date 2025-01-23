@@ -29,7 +29,7 @@ const TabsPanel: React.FC<TabsPanelProps> = (props) => {
                 defaultActiveKey={defaults}
                 items={tabs}
                 onChange={onTab}
-                tabBarExtraContent={<Button type='link' shape="circle"  onClick={() => navigate('/add-country')} icon={<PlusCircleOutlined />} />
+                tabBarExtraContent={<Button type='link' shape="circle"  onClick={() => navigate('/add-user')} icon={<PlusCircleOutlined />} />
             }
             />
         </>

@@ -88,7 +88,7 @@ const LayoutUsers: React.FC<PropsWithChildren> = ({children}) => {
 
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout hasSider={true} style={{ minHeight: '100vh' }}>
       <SiderMenu items={items}/>
       <Layout>
         <Content style={{ margin: '0 16px' }}>
@@ -99,7 +99,6 @@ const LayoutUsers: React.FC<PropsWithChildren> = ({children}) => {
           <div
             style={{
               minHeight: 360,
-              background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
           >

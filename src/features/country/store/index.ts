@@ -84,4 +84,5 @@ export class CountriesStore extends DataParamsState<TCountryData, TCountryParams
     // Установка полученных данных в состояние
     return response.data.result
   }
+
 }
