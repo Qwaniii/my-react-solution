@@ -46,8 +46,8 @@ const NewUser: React.FC = () => {
         <Form.Item name="username" label="Логин" required>
           <Input />
         </Form.Item>
-        <Form.Item name="password" label="Пароль" required>
-          <Input />
+        <Form.Item name="password"  label="Пароль" required >
+          <Input.Password type="password"/>
         </Form.Item>
         <Form.Item name="email" label="E-mail" required>
           <Input />

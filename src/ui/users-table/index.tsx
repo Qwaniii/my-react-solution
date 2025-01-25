@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { BarsOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
-import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
-import { Button, Form, Radio, Space, Spin, Switch, Table } from 'antd';
+import type { GetProp, MenuProps, RadioChangeEvent, TableProps } from 'antd';
+import { Button, Dropdown, Form, Radio, Space, Spin, Switch, Table } from 'antd';
 import { useExternalState, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import { TUserData, TUserProfile, TUserRoles } from '@src/features/users/store/types';
@@ -21,100 +21,17 @@ interface DataType {
   profile?: TUserProfile
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'ID',
-    dataIndex: '_id',
-    key: '_id',
-    sorter: (a, b) =>
-      a._id &&
-      a._id > b._id &&
-      b._id
-        ? 1
-        : -1,
-    // defaultSortOrder: "descend",
-  },
-  {
-    title: 'Логин',
-    dataIndex: 'username',
-    key: 'username',
-    sorter: (a, b) =>
-      a.username &&
-      a.username > b.username &&
-      b.username
-        ? 1
-        : -1,
-  },
-  {
-    title: 'Почта',
-    dataIndex: 'email',
-    key: 'email'
-    // filters: [
-    //   {
-    //     text: 'London',
-    //     value: 'London',
-    //   },
-    //   {
-    //     text: 'New York',
-    //     value: 'New York',
-    //   },
-    // ],
-    // onFilter: (value, record) => record.address.indexOf(value as string) === 0,
-  },
-  {
-    title: 'Статус',
-    dataIndex: 'status',
-    key: 'status',
-    render: (text: string) => {
-      switch (text) {
-        case 'new':
-          return <div>Новый</div>;
-        case 'reject':
-          return <div style={{ color: 'red'}}>Отклонен</div>;
-        case 'confirm':
-          return <div style={{ color: 'green'}}>Подтвержден</div>;
-        default:
-          <div>error</div>
-          break;
-    }
-  }
-},
-  {
-    title: 'Роль',
-    dataIndex: 'roles',
-    key: `roles`,
-    render: (roles: TUserRoles[]) => (
-      <>
-        {roles.map(role => {
-          return (
-            <div key={role._id} style={{color: role.name === 'admin' ? 'red' : 'blue'}}>{role.title}</div>
-          )
-        })}
-      </>
-    )
 
-  },
-  {
-    title: 'Действие',
-    key: 'action',
-    sorter: true,
-    render: () => (
-      <Space size="middle">
-        <a><DeleteOutlined /></a>
-        <a>
-          <Space>
-            <BarsOutlined />
-          </Space>
-        </a>
-      </Space>
-    ),
-  },
-];
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 
-const UsersTable: React.FC = () => {
+export type UsersTable = {
+  onDeleteUser: (_id: string, username: string) => Promise<void> 
+  onEdit: (_id: string) => Promise<void> 
+}
+
+const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
 
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -138,6 +55,123 @@ const UsersTable: React.FC = () => {
     console.log('Various parameters', pagination, filters, sorter);
     await users.setParams({page: pagination.current});
   }
+
+  const handleClickDpropDown = (key: string, record: {_id: string, username: string}) => {
+    switch (key) {
+      case 'edit': onEdit(record._id)
+        break;
+      case 'delete': onDeleteUser(record._id, record.username)
+        break;
+
+    }
+    
+  }
+
+  const items: MenuProps['items'] = [
+  {
+    label: (
+      <a>
+        Редактировать
+      </a>
+    ),
+    key: 'edit',
+  },
+  {
+    label: (
+      // <a onClick={() => onDeleteUser(record._id, record.username)}>
+      <a>
+        Удалить
+      </a>
+    ),
+    key: 'delete',
+  },
+]
+
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: 'ID',
+      dataIndex: '_id',
+      key: '_id',
+      sorter: (a, b) =>
+        a._id &&
+        a._id > b._id &&
+        b._id
+          ? 1
+          : -1,
+    },
+    {
+      title: 'Логин',
+      dataIndex: 'username',
+      key: 'username',
+      sorter: (a, b) =>
+        a.username &&
+        a.username > b.username &&
+        b.username
+          ? 1
+          : -1,
+    },
+    {
+      title: 'Почта',
+      dataIndex: 'email',
+      key: 'email'
+    },
+    {
+      title: 'Статус',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text: string) => {
+        switch (text) {
+          case 'new':
+            return <div>Новый</div>;
+          case 'reject':
+            return <div style={{ color: 'red'}}>Отклонен</div>;
+          case 'confirm':
+            return <div style={{ color: 'green'}}>Подтвержден</div>;
+          default:
+            <div>error</div>
+            break;
+      }
+    }
+  },
+    {
+      title: 'Роль',
+      dataIndex: 'roles',
+      key: `roles`,
+      render: (roles: TUserRoles[]) => (
+        <>
+          {roles.map(role => {
+            return (
+              <div key={role._id} style={{color: role.name === 'admin' ? 'red' : 'blue'}}>{role.title}</div>
+            )
+          })}
+        </>
+      )
+  
+    },
+    {
+      title: 'Действие',
+      key: 'action',
+      sorter: true,
+      render: (_, record) => (
+        <Space size="middle">
+          <a onClick={() => onDeleteUser(record._id, record.username)}><DeleteOutlined /></a>
+          <a>
+              <Space>
+                <Dropdown menu={{ items, onClick: ({key}) => handleClickDpropDown(key, record) }} trigger={['click']}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <BarsOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </Space>
+            </a>
+        </Space>
+      ),
+    },
+  ];
+  
 
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {

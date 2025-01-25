@@ -6,7 +6,6 @@ import { DataParamsState, type DefaultConfig } from 'react-solution';
 import type { RouterService } from 'react-solution';
 import type { UsersApi } from '@src/features/users/api';
 import { TUserData, TUserParams } from './types.js';
-import Item from '@src/content/Item/index.js';
 
 /**
  * Детальная информация о пользователе
