@@ -1,4 +1,4 @@
-import LayoutNewuser from "@src/ui/layout-newuser"
+import LayoutNewuser from "@src/ui/layout/layout-newuser"
 import NewUser from "@src/ui/new-user"
 import { memo } from "react"
 

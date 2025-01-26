@@ -4,7 +4,7 @@ export default defineConfig({
   use: {
 
     // All requests we send go to this API endpoint.
-    baseURL: 'http://localhost:8052/',
+    baseURL: 'http://localhost:8050/',
     // baseURL: 'http://www.ya.ru',
 
     extraHTTPHeaders: {

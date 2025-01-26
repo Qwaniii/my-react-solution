@@ -15,11 +15,12 @@ export type TabsPanelProps = {
     tabs: TabsProps['items'],
     onTab: (key: string) => Promise<void>;
     defaults: string;
+    link: string
 }
 
 const TabsPanel: React.FC<TabsPanelProps> = (props) => {
 
-    const {tabs, onTab, defaults, } = props
+    const {tabs, onTab, defaults, link} = props
 
       const navigate = useNavigate()
 
@@ -29,7 +30,7 @@ const TabsPanel: React.FC<TabsPanelProps> = (props) => {
                 defaultActiveKey={defaults}
                 items={tabs}
                 onChange={onTab}
-                tabBarExtraContent={<Button type='link' shape="circle"  onClick={() => navigate('/add-user')} icon={<PlusCircleOutlined />} />
+                tabBarExtraContent={<Button type='link' shape="circle"  onClick={() => navigate(link)} icon={<PlusCircleOutlined />} />
             }
             />
         </>

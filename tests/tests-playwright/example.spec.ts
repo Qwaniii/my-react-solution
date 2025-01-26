@@ -6,6 +6,15 @@ test('send data', async ({ page }) => {
 
   // })
 
+  await page.route('**/api/v1/countries', route => {
+    // Верните заглушку ответа, вместо отправки реальных данных на сервер
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true, message: 'Data received' })
+    });
+  });
+
   await page.goto('./add-country');
 
   //проверяем наличие текста

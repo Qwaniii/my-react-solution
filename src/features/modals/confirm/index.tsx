@@ -1,5 +1,5 @@
-import ModalLayout from '@src/ui/modal-layout';
-import SideLayout from '@src/ui/side-layout';
+import ModalLayout from '@src/ui/layout/modal-layout';
+import SideLayout from '@src/ui/layout/side-layout';
 import { Modal } from 'antd';
 import { memo, useCallback } from 'react';
 import { useTranslate } from 'react-solution';

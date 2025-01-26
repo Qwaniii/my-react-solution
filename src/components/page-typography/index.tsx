@@ -3,7 +3,7 @@ import React, { memo } from "react"
 
 export type PageTypography = {
     title: string;
-    desc: string
+    desc: string | undefined
 }
 
 

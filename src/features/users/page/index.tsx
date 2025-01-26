@@ -2,7 +2,7 @@ import { memo, useCallback } from "react"
 import { MODALS, useInit, useSolution } from "react-solution";
 import { USERS_STORE } from "../store/token";
 import UsersTable from "@src/ui/users-table";
-import LayoutUsers from "@src/ui/layout-users";
+import LayoutUsers from "@src/ui/layout/layout-users";
 import { CONFIRM_MODAL } from "@src/features/modals/confirm/token";
 import { USERS_API } from "../api/token";
 

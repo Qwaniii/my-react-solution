@@ -27,6 +27,7 @@ const NewUser: React.FC = () => {
   const onFinish = async (values: any) => {
     const res = await users.create({data: {...values, profile: {}}})
     console.log(res)
+    // eslint-disable-next-line no-constant-condition
     if(res.status === 200 || 201) {
       navigate('/')
     }   

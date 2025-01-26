@@ -10,7 +10,7 @@ export class UsersApi extends ApiCrudEndpoint<UsersApiConfig> {
     }
 
     override update(_a: any) {
-      let { id, data, fields = "*" } = _a, other = __rest(_a, ["id", "data", "fields"]);
+      const { id, data, fields = "*" } = _a, other = __rest(_a, ["id", "data", "fields"]);
       return this.request({
         method: "PUT",
         url: `${this.config.url}/${id}`,

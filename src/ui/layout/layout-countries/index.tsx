@@ -92,7 +92,7 @@ const items: MenuItem[] = [
           <Breadcrumbs styled={{ margin: '16px 0' }} paths={breadcrumbPaths} />
           <PageTypography title='Страны' desc='Список стран'/>
           <SearchForm placeholder='Поиск...' button='Найти' onSearch={callbacks.onSearch}/>
-          <TabsPanel tabs={tabs} defaults='all' onTab={callbacks.onTab}/>
+          <TabsPanel tabs={tabs} defaults='all' onTab={callbacks.onTab} link={'/add-country'}/>
           <div
             style={{
               minHeight: 360,

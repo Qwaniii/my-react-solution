@@ -6,6 +6,8 @@ import { useExternalState, useSolutionMap } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import { TUserData, TUserProfile, TUserRoles } from '@src/features/users/store/types';
 import Item from '@src/content/Item';
+import UsersDrawer from '@src/components/users-drawer';
+import { Link } from 'react-router-dom';
 
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
@@ -43,6 +45,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState<string>('unset');
+  const [open, setOpen] = useState(false)
 
 
   const { users } = useSolutionMap({
@@ -53,12 +56,21 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
 
   const handleChange: OnChange = async (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
-    await users.setParams({page: pagination.current});
+    await users.setParams({page: pagination.current}); 
   }
 
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+  
   const handleClickDpropDown = (key: string, record: {_id: string, username: string}) => {
     switch (key) {
-      case 'edit': onEdit(record._id)
+      case 'edit': showDrawer()
+      // case 'edit': onEdit(record._id)
         break;
       case 'delete': onDeleteUser(record._id, record.username)
         break;
@@ -66,6 +78,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
     }
     
   }
+
 
   const items: MenuProps['items'] = [
   {
@@ -93,12 +106,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
       title: 'ID',
       dataIndex: '_id',
       key: '_id',
-      sorter: (a, b) =>
-        a._id &&
-        a._id > b._id &&
-        b._id
-          ? 1
-          : -1,
+      render: (text, record) => <Link to={'users/' + record._id}>{text}</Link>
     },
     {
       title: 'Логин',
@@ -214,6 +222,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
         scroll={scroll}
         onChange={handleChange}
       />
+      <UsersDrawer open={open} onClose={onClose}/>
 
     </>
   );

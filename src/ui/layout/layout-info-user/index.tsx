@@ -11,52 +11,49 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps, TabsProps } from 'antd';
 import { Layout, theme } from 'antd';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import SearchForm from '@src/components/search-form';
-import { useExternalState, useSolution } from 'react-solution';
+import { GetQuery, useExternalState, useInit, useSolution } from 'react-solution';
 import { USERS_STORE } from '@src/features/users/store/token';
 import SiderMenu from '@src/components/sider-menu';
 import Breadcrumbs from '@src/components/breadcrumbs';
 import PageTypography from '@src/components/page-typography';
 import TabsPanel from '@src/components/tabs-panel';
+import UsersDrawer from '@src/components/users-drawer';
+import InfoUser from '@src/ui/info-user';
+import { PROFILE_STORE } from '@src/features/profile-store/token';
 
 const { Content } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-const LayoutUsers: React.FC<PropsWithChildren> = ({children}) => {
+export type ParamsProps = {
+  id: string
+}
+
+const LayoutInfoUsers: React.FC = () => {
   
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const params = useParams<keyof ParamsProps>() as ParamsProps;
   
-  const users = useSolution(USERS_STORE);
-  const usersState = useExternalState(users.state)
- 
-  const callbacks = {
-    onSearch: (value: string) => users.setParams({email: value}),
-    onTab: (key: string) => users.setParams({status: key})
+  const profile = useSolution(PROFILE_STORE);
+  const profileState = useExternalState(profile.state)
 
-  }
 
-  const tabs: TabsProps['items'] = [
-    {
-      key: 'all',label: `Все (${usersState.data.allCount})`,icon: <UserSwitchOutlined />,
+  useInit(
+    async () => {
+      await profile.load(params.id);
     },
-    {
-      key: 'new',label: `Новые (${usersState.data.newCount})`,icon: <TwitterOutlined />,
-    },
-    {
-      key: 'confirm',label: `Подтвержденные (${usersState.data.confirmCount})`,icon: <ContactsOutlined />,
-    },
-    {
-      key: 'reject',label: `Отклоненные (${usersState.data.rejectCount})`,icon: <FrownOutlined />,
-    }
-  ]
+    [params.id],
+    { ssr: 'profile.init' },
+  ); 
 
   const breadcrumbPaths = [
     { label: 'Главная', link: '/' },
-    { label: 'Пользователи' },
+    { label: `${params.id}` },
   ];
 
   type MenuItem = Required<MenuProps>['items'][number];
@@ -93,16 +90,14 @@ const LayoutUsers: React.FC<PropsWithChildren> = ({children}) => {
       <Layout>
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumbs styled={{ margin: '16px 0' }} paths={breadcrumbPaths} />
-          <PageTypography title='Пользователи' desc='Список пользователей'/>
-          <SearchForm placeholder='Поиск...' button='Найти' onSearch={callbacks.onSearch}/>
-          <TabsPanel tabs={tabs} defaults='all' onTab={callbacks.onTab}/>
+          <PageTypography title='Пользователь' desc={params.id}/>
           <div
             style={{
               minHeight: 360,
               borderRadius: borderRadiusLG,
             }}
           >
-          {children}
+          <InfoUser data={profileState.data} waiting={profileState.waiting}/>
           </div>
         </Content>
       </Layout>
@@ -110,4 +105,4 @@ const LayoutUsers: React.FC<PropsWithChildren> = ({children}) => {
   );
 };
 
-export default memo(LayoutUsers);
+export default memo(LayoutInfoUsers);

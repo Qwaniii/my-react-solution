@@ -7,6 +7,8 @@ import CountriesPage from '../features/country/page'
 import '../style.less'
 import AddCountry from '@src/features/country/containers/add-country';
 import AddUser from '@src/features/users/containers/add-user';
+import LayoutInfouser from '@src/ui/layout/layout-info-user';
+import LayoutInfoUser from '@src/ui/layout/layout-info-user';
 
 export const App = memo(() => {
   return (
@@ -20,6 +22,7 @@ export const App = memo(() => {
         <Routes>
           {/* <Route path="/" index element={<CatalogPage/>} /> */}
           <Route path="/" index element={<UsersPage/>} />
+          <Route path="users/:id" index element={<LayoutInfoUser/>} />
           <Route path="/countries" element={<CountriesPage />} />
           <Route path="/add-country" element={<AddCountry />} />
           <Route path="/add-user" element={<AddUser />} />

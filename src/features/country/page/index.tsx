@@ -2,7 +2,7 @@ import { memo, useCallback } from "react"
 import { MODALS, useInit, useSolution } from "react-solution";
 import { COUNTRIES_STORE } from "../store/token";
 import CountriesTable from "@src/ui/countries-table";
-import LayoutCountries from "@src/ui/layout-countries";
+import LayoutCountries from "@src/ui/layout/layout-countries";
 import { CONFIRM_MODAL } from "@src/features/modals/confirm/token";
 import { COUNTRIES_API } from "../api/token";
 
