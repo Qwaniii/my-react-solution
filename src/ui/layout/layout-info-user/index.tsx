@@ -1,4 +1,4 @@
-import React, { Children, memo, PropsWithChildren, useState } from 'react';
+import React, { Children, memo, PropsWithChildren, useEffect, useState } from 'react';
 import {
   ContactsOutlined,
   FileOutlined,
@@ -26,7 +26,6 @@ import { PROFILE_STORE } from '@src/features/profile-store/token';
 const { Content } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
-
 export type ParamsProps = {
   id: string
 }
@@ -42,7 +41,6 @@ const LayoutInfoUsers: React.FC = () => {
   const profile = useSolution(PROFILE_STORE);
   const profileState = useExternalState(profile.state)
 
-
   useInit(
     async () => {
       await profile.load(params.id);
@@ -51,12 +49,11 @@ const LayoutInfoUsers: React.FC = () => {
     { ssr: 'profile.init' },
   ); 
 
+
   const breadcrumbPaths = [
     { label: 'Главная', link: '/' },
     { label: `${params.id}` },
   ];
-
-  type MenuItem = Required<MenuProps>['items'][number];
 
   function getItem(
     label: React.ReactNode,
@@ -72,7 +69,6 @@ const LayoutInfoUsers: React.FC = () => {
     } as MenuItem;
   }
   
-  
   const items: MenuItem[] = [
     getItem('Пользователи', '/all', <UserOutlined />, [
       getItem('Все пользователи', '/'),
@@ -82,7 +78,6 @@ const LayoutInfoUsers: React.FC = () => {
     getItem('Страны', '/countries', <PictureFilled />, [getItem('Все страны', '/countries'), getItem('Добавить страну', '/add-country')]),
     getItem('Отчеты', '10', <FileOutlined />),
   ];
-
 
   return (
     <Layout hasSider={true} style={{ minHeight: '100vh' }}>

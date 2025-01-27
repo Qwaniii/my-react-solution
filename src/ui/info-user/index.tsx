@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Button, Col, DatePicker, Form, Input, Row, Select, Space, Spin } from 'antd';
 import { useExternalState, useSolution } from 'react-solution';
 import { PROFILE_STORE } from '@src/features/profile-store/token';
@@ -12,20 +12,29 @@ const InfoUser: React.FC<ProfileStoreData> = ({data, waiting}) => {
 
   const [editUser, setEditUser] = useState(true)
 
+  const [form] = Form.useForm()
+
+  useEffect(() => {
+    form.setFieldsValue(data);
+  }, [data, form]);
+
 
 
   return (
     <>
       <Spin spinning={waiting}>
-        <Form clearOnDestroy layout="vertical" disabled={editUser}>
+        <Form clearOnDestroy layout="vertical" disabled={editUser}
+        form={form}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="username"
                 label="Username"
                 rules={[{ required: true, message: 'Please enter user name' }]}
+                shouldUpdate
               >
-                <Input placeholder="Введите username" defaultValue={data?.username}/>
+                <Input placeholder="Введите username"/>
               </Form.Item>
             </Col>
             <Col span={12}>

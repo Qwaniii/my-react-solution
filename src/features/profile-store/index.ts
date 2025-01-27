@@ -40,7 +40,6 @@ export class ProfileStore {
       waiting: true,
     });
 
-    // Выбор своего профиля из АПИ
     const { data } = await this.depends.usersApi.findOne({id: id});
 
     // Профиль загружен успешно
