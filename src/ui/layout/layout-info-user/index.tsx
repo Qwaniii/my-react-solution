@@ -43,7 +43,15 @@ const LayoutInfoUsers: React.FC = () => {
 
   useInit(
     async () => {
-      await profile.load(params.id);
+      const data = await profile.load(params.id);
+      if(profileState.data?.profile.avatar._id) {
+        const answer = await profile.loadAvatar(profileState.data?.profile.avatar._id)
+        console.log(answer)
+        profile.state.set({
+          ...profile.state.get(),
+          avatar: answer.url
+        })
+      }
     },
     [params.id],
     { ssr: 'profile.init' },
@@ -92,7 +100,7 @@ const LayoutInfoUsers: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-          <InfoUser data={profileState.data} waiting={profileState.waiting}/>
+          <InfoUser data={profileState.data} waiting={profileState.waiting} avatar={profileState.avatar}/>
           </div>
         </Content>
       </Layout>

@@ -164,7 +164,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => onDeleteUser(record._id, record.username)}><DeleteOutlined /></a>
-          <a>
+          <div>
               <Space>
                 <Dropdown menu={{ items, onClick: ({key}) => handleClickDpropDown(key, record) }} trigger={['click']}>
                   <a onClick={(e) => e.preventDefault()}>
@@ -174,7 +174,7 @@ const UsersTable: React.FC<UsersTable> = ({onDeleteUser, onEdit}) => {
                   </a>
                 </Dropdown>
               </Space>
-            </a>
+            </div>
         </Space>
       ),
     },

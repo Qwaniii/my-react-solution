@@ -7,7 +7,8 @@ export const configs = [
     baseURL: env.SSR ? env.API_URL : '',
     headers: {
       'Content-Type': 'application/json',
-      'X-Token': '5b17129b9c6ea2ad562480d9cea55c1e6d51ca97893047cfe2f92efec4895f73'
+      'X-Token': '5b17129b9c6ea2ad562480d9cea55c1e6d51ca97893047cfe2f92efec4895f73',
+      "Strict-Transport-Security": "max-age=31536000"
     },
     //auth:{} base auth
   })),

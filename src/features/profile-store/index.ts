@@ -3,6 +3,7 @@ import { type LogInterface, State } from 'react-solution';
 import type { GetQuery, Patch } from 'react-solution';
 import { UsersApi } from '../users/api';
 import { ProfileStoreConfig, ProfileStoreData } from './types';
+import { AvatarApi } from '../users/avatar-api';
 
 /**
  * Детальная информация о пользователе
@@ -14,6 +15,7 @@ export class ProfileStore {
   constructor(
     protected depends: {
       usersApi: UsersApi;
+      avatarApi: AvatarApi
       config?: Patch<ProfileStoreConfig>;
       logger: LogInterface;
     },
@@ -27,24 +29,27 @@ export class ProfileStore {
     return {
       data: null,
       waiting: false, // признак ожидания загрузки
+      avatar: null
     };
   }
 
   /**
    * Загрузка профиля
    */
-   async load(id: string ) {
+   async load(id: string ): Promise<any> {
     // Сброс текущего профиля и установка признака ожидания загрузки
     this.state.set({
       data: null,
       waiting: true,
+      avatar: null
     });
 
     const { data } = await this.depends.usersApi.findOne({id: id});
 
     // Профиль загружен успешно
     this.state.set(
-      {
+      { 
+        ...this.state.get(),
         data: data.result,
         waiting: false,
       },
@@ -60,4 +65,16 @@ export class ProfileStore {
     },
   'сброс пользователя');
   }
+
+  async loadAvatar(_id: any): Promise<any>  {
+    const { data } = await this.depends.avatarApi.findOne({id: _id})
+    this.state.set(
+      { 
+        ...this.state.get(),
+        avatar: data.result.url,
+      },
+      'Загружен аватар из АПИ',
+    );
+  }
+
 }

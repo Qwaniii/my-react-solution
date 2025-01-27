@@ -9,15 +9,19 @@ export type ProfileStoreUser = {
       name: string;
       phone: string;
       gender: string;
-      avatar: {
-        id: string
-      }
+      avatar: ProfileAvatar;
+      birthday: string
     };
+}
+
+export type ProfileAvatar = {
+  _id: string 
 }
 
 export interface ProfileStoreData {
   data: ProfileStoreUser | null;
   waiting: boolean;
+  avatar?: ProfileAvatar | null
 }
 
 export type ProfileStoreConfig = object;

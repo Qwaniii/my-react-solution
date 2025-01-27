@@ -3,12 +3,14 @@ import { optionalToken } from 'react-solution';
 import { ProfileStore } from './index.ts';
 import { PROFILE_STORE, PROFILE_STORE_CFG } from './token.ts';
 import { USERS_API } from '../users/api/token.ts';
+import { AVATAR_API } from '../users/avatar-api/token.ts';
 
 export const profileStore = injectClass({
   token: PROFILE_STORE,
   constructor: ProfileStore,
   depends: {
     usersApi: USERS_API,
+    avatarApi: AVATAR_API,
     config: optionalToken(PROFILE_STORE_CFG),
     logger: LOG_SERVICE,
   },

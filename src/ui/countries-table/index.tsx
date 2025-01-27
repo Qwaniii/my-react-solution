@@ -122,7 +122,7 @@ const CountriesTable: React.FC<CountriesTableProps> = ({onConfirm}) => {
         render: (_, record) => (
           <Space size="middle">
             <a onClick={() => onConfirm(record._id, record.title)}><DeleteOutlined /></a>
-            <a>
+            <div>
               <Space>
                 <Dropdown menu={{ items }} trigger={['click']}>
                   <a onClick={(e) => e.preventDefault()}>
@@ -132,7 +132,7 @@ const CountriesTable: React.FC<CountriesTableProps> = ({onConfirm}) => {
                   </a>
                 </Dropdown>
               </Space>
-            </a>
+            </div>
           </Space>
         ),
     }
