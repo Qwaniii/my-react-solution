@@ -44,14 +44,14 @@ const LayoutInfoUsers: React.FC = () => {
   useInit(
     async () => {
       const data = await profile.load(params.id);
-      if(profileState.data?.profile.avatar._id) {
-        const answer = await profile.loadAvatar(profileState.data?.profile.avatar._id)
-        console.log(answer)
-        profile.state.set({
-          ...profile.state.get(),
-          avatar: answer.url
-        })
-      }
+      // if(profileState.data?.profile.avatar._id) {
+      //   const answer = await profile.loadAvatar(profileState.data?.profile.avatar._id)
+      //   console.log(answer)
+      //   profile.state.set({
+      //     ...profile.state.get(),
+      //     avatar: answer.url
+      //   })
+      // }
     },
     [params.id],
     { ssr: 'profile.init' },

@@ -30,7 +30,8 @@ const InfoUser: React.FC<ProfileStoreData> = ({data, waiting, avatar}) => {
     async () => {
       if(data?.profile.avatar._id) {
         await profile.loadAvatar(data?.profile.avatar._id);
-      } else profile.reset
+      } else profile.reset()
+      return () => profile.reset()
     },
     [data?.profile.avatar._id],
     { ssr: 'avatar.init' },
@@ -57,10 +58,11 @@ const InfoUser: React.FC<ProfileStoreData> = ({data, waiting, avatar}) => {
   return (
     <>
       <Spin spinning={waiting}>
-      <Image
+      {avatar && <Image
         width={200}
-        src={avatar}
-      />
+        // src={avatar}
+        src={`http://query.rest` + avatar}
+      />}
       <Space/>
         <Form clearOnDestroy 
         layout="vertical" 

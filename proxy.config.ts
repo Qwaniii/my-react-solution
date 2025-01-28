@@ -5,9 +5,13 @@ export default function proxyConfig(env: Env) {
       secure: false,
       changeOrigin: true,
       timeout: 2000,
-      '^/uploads': {
-        target: env.API_URL
-      },
+      // '^/uploads': {
+      //   target: 'http://query.rest',
+      //   secure: true,
+      //   changeOrigin: true,
+      //   timeout: 2000,
+  
+      // },
     },
   };
 }
