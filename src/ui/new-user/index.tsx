@@ -29,7 +29,7 @@ const NewUser: React.FC = () => {
     console.log(res)
     // eslint-disable-next-line no-constant-condition
     if(res.status === 200 || 201) {
-      navigate('/')
+      navigate(-1)
     }   
   };
 

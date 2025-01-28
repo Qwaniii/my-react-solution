@@ -5,6 +5,9 @@ export default function proxyConfig(env: Env) {
       secure: false,
       changeOrigin: true,
       timeout: 2000,
+      '^/uploads': {
+        target: env.API_URL
+      },
     },
   };
 }

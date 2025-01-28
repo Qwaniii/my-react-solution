@@ -35,6 +35,7 @@ export default defineConfig(params => {
       }),
     ],
     server: {
+      
       port: env.PORT,
       proxy: proxyConfig(env),
       hmr: true,

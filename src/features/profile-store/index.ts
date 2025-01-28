@@ -29,7 +29,7 @@ export class ProfileStore {
     return {
       data: null,
       waiting: false, // признак ожидания загрузки
-      avatar: null
+      avatar: ''
     };
   }
 
@@ -41,7 +41,7 @@ export class ProfileStore {
     this.state.set({
       data: null,
       waiting: true,
-      avatar: null
+      avatar: ''
     });
 
     const { data } = await this.depends.usersApi.findOne({id: id});
@@ -57,17 +57,19 @@ export class ProfileStore {
     );
   }
 
-  reset( ) {
+  reset() {
     // Сброс текущего профиля и установка признака ожидания загрузки
     this.state.set({
-      data: null,
-      waiting: true,
+      ...this.state.get(),
+      avatar: '',
     },
-  'сброс пользователя');
+  'сброс аватара');
   }
 
   async loadAvatar(_id: any): Promise<any>  {
+    
     const { data } = await this.depends.avatarApi.findOne({id: _id})
+
     this.state.set(
       { 
         ...this.state.get(),
@@ -77,4 +79,15 @@ export class ProfileStore {
     );
   }
 
+  setProfileState(values: any) {
+    this.state.set(
+      { 
+        ...this.state.get(),
+        data: values,
+      },
+      'Изменен профиль',
+    );
+  }
+
 }
+

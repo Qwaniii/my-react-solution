@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, Upload } from 'antd';
 
 export type UserDrawerProps = {
   open: boolean | undefined
@@ -14,7 +14,7 @@ const UsersDrawer: React.FC<UserDrawerProps> = ({open, onClose}) => {
   return (
     <>
       <Drawer
-        title="Create a new account"
+        title="Редактировать пользователя :id"
         width={720}
         onClose={onClose}
         open={open}
@@ -25,35 +25,39 @@ const UsersDrawer: React.FC<UserDrawerProps> = ({open, onClose}) => {
         }}
         extra={
           <Space>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>Отмена</Button>
             <Button onClick={onClose} type="primary">
-              Submit
+              Сохранить
             </Button>
           </Space>
         }
       >
-        <Form layout="vertical" hideRequiredMark>
+          <Form clearOnDestroy 
+            layout="vertical" 
+        
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="name"
-                label="Name"
+                name="username"
+                label="Логин"
                 rules={[{ required: true, message: 'Please enter user name' }]}
+                shouldUpdate
               >
-                <Input placeholder="Please enter user name" />
+                <Input placeholder="Введите username"/>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="url"
-                label="Url"
-                rules={[{ required: true, message: 'Please enter url' }]}
+                name="email"
+                label="E-mail"
+                rules={[{ required: true, message: 'Please enter email' }]}
+                
               >
                 <Input
                   style={{ width: '100%' }}
-                  addonBefore="http://"
-                  addonAfter=".com"
-                  placeholder="Please enter url"
+                  placeholder="Введите Email"
+                  // defaultValue={data?.email}
                 />
               </Form.Item>
             </Col>
@@ -61,69 +65,71 @@ const UsersDrawer: React.FC<UserDrawerProps> = ({open, onClose}) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="owner"
-                label="Owner"
-                rules={[{ required: true, message: 'Please select an owner' }]}
+                // name="phone"
+                name={['profile', 'phone']}
+                label="Телефон"
+                // initialValue={data?.profile.phone}
               >
-                <Select placeholder="Please select an owner">
-                  <Option value="xiao">Xiaoxiao Fu</Option>
-                  <Option value="mao">Maomao Zhou</Option>
-                </Select>
+                <Input
+                  style={{ width: '100%' }}
+                  placeholder="Введите телефон"
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="type"
-                label="Type"
-                rules={[{ required: true, message: 'Please choose the type' }]}
+                name={['profile', 'name']}
+                label="Имя"
+                // initialValue={data?.profile.name}
               >
-                <Select placeholder="Please choose the type">
-                  <Option value="private">Private</Option>
-                  <Option value="public">Public</Option>
-                </Select>
+                <Input
+                  style={{ width: '100%' }}
+                  placeholder="Введите имя"
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="approver"
-                label="Approver"
-                rules={[{ required: true, message: 'Please choose the approver' }]}
+                name={['profile', 'gender']}
+                label="Пол"
+                // initialValue={data?.profile.gender}
               >
-                <Select placeholder="Please choose the approver">
-                  <Option value="jack">Jack Ma</Option>
-                  <Option value="tom">Tom Liu</Option>
+                <Select placeholder="Выберете пол">
+                  <Option value="male">Мужской</Option>
+                  <Option value="female">Женский</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="dateTime"
-                label="DateTime"
-                rules={[{ required: true, message: 'Please choose the dateTime' }]}
+              {/* <Form.Item
+                name={['profile', 'birthday']}
+                initialValue={data?.profile.birthday}
+                label="Дата рождения"
               >
-                <DatePicker.RangePicker
+                <DatePicker
                   style={{ width: '100%' }}
                   getPopupContainer={(trigger) => trigger.parentElement!}
                 />
-              </Form.Item>
+              </Form.Item> */}
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'please enter url description',
-                  },
-                ]}
+            <Form.Item label="Аватар" name={['profile', 'avatar']}>
+              {/* <Upload customRequest={(file) => onLoadPicture(file)} listType="picture-card">
+                <button style={{ border: 0, background: 'none' }} type="button" disabled={editUser}>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </button>
+              </Upload> */}
+              <Upload 
+              // customRequest={(file) => onLoadPicture(file)}
               >
-                <Input.TextArea rows={4} placeholder="please enter url description" />
-              </Form.Item>
+                  <Button icon={<UploadOutlined />}>Загрузить</Button>
+              </Upload>
+             </Form.Item>
             </Col>
           </Row>
         </Form>

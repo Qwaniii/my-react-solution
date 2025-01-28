@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Button, Col, DatePicker, Form, Image, Input, Row, Select, Space, Spin, Upload } from 'antd';
-import { ENV, envClient, useExternalState, useInit, useSolution } from 'react-solution';
+import { Alert, Button, Col, DatePicker, Form, Image, Input, message, Row, Select, Space, Spin, Upload } from 'antd';
+import { ENV, envClient, HTTP_CLIENT, useExternalState, useInit, useSolution } from 'react-solution';
 import { PROFILE_STORE } from '@src/features/profile-store/token';
 import { ProfileStoreData, ProfileStoreUser } from '@src/features/profile-store/types';
-import { PlusOutlined } from '@ant-design/icons';
-import { envServer } from 'react-solution/server';
+import { NotificationFilled, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { USERS_API } from '@src/features/users/api/token';
+import { FILES_API } from '@src/features/users/files/token';
 
 
 const { Option } = Select;
@@ -12,11 +13,14 @@ const { Option } = Select;
 const InfoUser: React.FC<ProfileStoreData> = ({data, waiting, avatar}) => {
 
   const profile = useSolution(PROFILE_STORE);
-
+  const users = useSolution(USERS_API)
+  const files = useSolution(FILES_API)
 
   const [editUser, setEditUser] = useState(true)
+  const [ava, setAva] = useState('')
 
   const [form] = Form.useForm()
+
 
   useEffect(() => {
     form.setFieldsValue(data);
@@ -26,26 +30,44 @@ const InfoUser: React.FC<ProfileStoreData> = ({data, waiting, avatar}) => {
     async () => {
       if(data?.profile.avatar._id) {
         await profile.loadAvatar(data?.profile.avatar._id);
-      }
+      } else profile.reset
     },
     [data?.profile.avatar._id],
     { ssr: 'avatar.init' },
   );
 
-  const onFinish = (data: any) => {
-    console.log(data)
+  const onLoadPicture = async (file: any) => {
+    const res = await files.create({data:file})
+    console.log(res.data.result._id)
+    setAva(res.data.result._id)
+  }
+
+  const onFinish = async (values: any) => {
+    try {const res = await users.update({id: data?._id, data: {...values, profile: {...values.profile, avatar: {_id:ava}}}})
+    console.log(res)
+    if(res.status === 200) {
+      setEditUser(true)
+      message.success('Сохранено', 3)
+      profile.setProfileState(res.data.result)}
+    } catch {
+      message.error('Ошибка', 3)
+    }
   }
 
   return (
     <>
+      <Spin spinning={waiting}>
       <Image
         width={200}
-        src={`http://query-rest + ${avatar}`}
+        src={avatar}
       />
-      <Spin spinning={waiting}>
-        <Form clearOnDestroy layout="vertical" disabled={editUser}
+      <Space/>
+        <Form clearOnDestroy 
+        layout="vertical" 
+        disabled={editUser}
         form={form}
         onFinish={onFinish}
+        
         >
           <Row gutter={16}>
             <Col span={12}>
@@ -128,19 +150,22 @@ const InfoUser: React.FC<ProfileStoreData> = ({data, waiting, avatar}) => {
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-            <Form.Item label="Аватар" valuePropName="fileList" >
-              <Upload action="/upload.do" listType="picture-card">
+            <Form.Item label="Аватар" name={['profile', 'avatar', `_id: ${ava}`]}>
+              {/* <Upload customRequest={(file) => onLoadPicture(file)} listType="picture-card">
                 <button style={{ border: 0, background: 'none' }} type="button" disabled={editUser}>
                   <PlusOutlined />
                   <div style={{ marginTop: 8 }}>Upload</div>
                 </button>
+              </Upload> */}
+              <Upload customRequest={(file) => onLoadPicture(file)}>
+                  <Button icon={<UploadOutlined />}>Загрузить</Button>
               </Upload>
              </Form.Item>
             </Col>
           </Row>
           <Space>
-          <Button onClick={() => setEditUser(true)} disabled={editUser}>Отмана</Button>
-          <Button onClick={editUser ? () => setEditUser(false) : () => setEditUser(true)} disabled={false} type="primary" htmlType= {editUser ? 'submit' : 'button' }>
+          <Button onClick={() => setEditUser(true)} disabled={editUser}>Отмена</Button>
+          <Button onClick={editUser ? () => setEditUser(false) : () => form.submit()} disabled={false} type="primary" htmlType= {editUser ? 'submit' : 'button' }>
             {editUser ? 'Изменить' : 'Сохранить'}
           </Button>
         </Space>

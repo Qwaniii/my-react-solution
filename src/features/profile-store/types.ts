@@ -21,7 +21,7 @@ export type ProfileAvatar = {
 export interface ProfileStoreData {
   data: ProfileStoreUser | null;
   waiting: boolean;
-  avatar?: ProfileAvatar | null
+  avatar?: string
 }
 
 export type ProfileStoreConfig = object;
