@@ -3,7 +3,7 @@ import { test, expect } from 'playwright/test';
 test('send data', async ({ page }) => {
 
   await test.step('Заглушка на отправку данных на сервер', async () => {
-    await page.route('**/api/v1/countries?fields=*', async (route) => {
+    await page.route('**/api/v1/countries**', async (route) => {
       // Верните заглушку ответа, вместо отправки реальных данных на сервер
       await route.fulfill({
         status: 200,
