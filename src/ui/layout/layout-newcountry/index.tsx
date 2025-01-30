@@ -52,7 +52,7 @@ const items: MenuItem[] = [
   ]),
   getItem('Каталог', 'sub2', <TeamOutlined />, [getItem('Каталог 1', '6'), getItem('Каталог 2', '8')]),
   getItem('Страны', '/countries', <PictureFilled />, [getItem('Все страны', '/countries'), getItem('Добавить страну', '/add-country')]),
-  getItem('Отчеты', '10', <FileOutlined />),
+    getItem('Canvas', '/draw', <FileOutlined />),
 ];
 
 
