@@ -13,6 +13,7 @@ const DrawPage = () => {
         {'Черный квадрат': {width:77, height: 77, color: 'black'}},
         {'Круг': {start:77, end: 77, color: 'magenta', radius: 10}},
         {'Треугольник': {width: 10, height: 50, color: 'gray', tre: 'треугольник'}},
+        {'Линия': {width: 1, height: 100, color: 'orange', line: 'линия'}},
 
     ]
 

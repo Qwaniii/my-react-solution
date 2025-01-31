@@ -66,8 +66,10 @@ class Core {
       this.metrics.height = this.root.offsetHeight;
       this.metrics.dpr = window.devicePixelRatio;
       // Физический размер канвы с учётом плотности пикселей (т.е. канва может быть в разы больше)
-      this.canvas.width = this.metrics.width * this.metrics.dpr;
-      this.canvas.height = this.metrics.height * this.metrics.dpr;
+      // this.canvas.width = this.metrics.width * this.metrics.dpr;
+      // this.canvas.height = this.metrics.height * this.metrics.dpr;
+      this.canvas.width = this.metrics.width
+      this.canvas.height = this.metrics.height
       // Фактический размер канвы
       this.canvas.style.width = `${this.metrics.width}px`;
       this.canvas.style.height = `${this.metrics.height}px`;
@@ -92,9 +94,9 @@ class Core {
       this.ctx.fillStyle = '#ebf4ff';
       this.ctx.fillRect(0, 0, this.metrics.width, this.metrics.height);
       // scroll
-    //   this.ctx.translate(-this.metrics.scrollX, -this.metrics.scrollY);
-      // scale
-    //   this.ctx.scale(this.metrics.zoom, this.metrics.zoom);
+      // this.ctx.translate(-this.metrics.scrollX, -this.metrics.scrollY);
+      // // scale
+      // this.ctx.scale(this.metrics.zoom, this.metrics.zoom);
 
 
       this.ctx.restore();
@@ -133,12 +135,13 @@ class Core {
     // this.ctx?.arc(e.clientX, e.clientY, 30, 0, 90)
     // this.ctx?.fill()
 
-    const element = new Figure(e.clientX - this.metrics.left , e.clientY - this.metrics.top, this.elements.width, this.elements.height, this.elements.color)
+    const element = new Figure(e.clientX - this.metrics.left, e.clientY - this.metrics.top, this.elements.width, this.elements.height, this.elements.color)
 
     if(this.ctx) {
         if(!this.elements.radius && !this.elements.tre) element.draw(this.ctx)
         if(this.elements.radius && !this.elements.tre) element.drawArc(this.ctx)
         if(this.elements.tre) element.drawTre(this.ctx)
+        if(this.elements.line) element.drawLine(this.ctx)
     }
 
 

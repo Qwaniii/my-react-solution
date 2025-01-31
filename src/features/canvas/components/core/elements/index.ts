@@ -89,6 +89,18 @@ class Figure {
     ctx.fill()
   }
 
+  drawLine(ctx: CanvasRenderingContext2D) {
+    
+
+    // Rect
+    ctx.fillStyle = this.color;
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(this.x, this.y)
+    ctx.lineTo(this.x - this.width, this.y  - this.height);
+    // ctx.stroke()
+  }
+
 
 }
 
