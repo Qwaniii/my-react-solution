@@ -9,7 +9,7 @@ class Core {
   // Контекст для 2D рисования
   ctx: CanvasRenderingContext2D | null = null;
   // Элементы для рендера
-  elements: any;
+  elements: Figure[] = [];
   // Метрики канвы
   metrics = {
     left: 0,
@@ -23,10 +23,10 @@ class Core {
   };
   // Активное действие (обычно при зажатой клавиши мышки)
   action: Action | null = null;
-  color: string = 'black'
+  figure: any
 
-  constructor(elements: any) {
-    this.elements = elements
+  constructor(figure: any) {
+    this.figure = figure
   }
 
   mount(root: HTMLElement) {
@@ -47,7 +47,8 @@ class Core {
     this.ctx = this.canvas.getContext('2d');
 
     if (this.ctx) {
-      // Актуализация размеров канвы
+      // Актуализация размеров
+      //  канвы
       this.resize();
       // Запуск цикла рендера
       this.draw();
@@ -74,7 +75,7 @@ class Core {
       this.canvas.style.width = `${this.metrics.width}px`;
       this.canvas.style.height = `${this.metrics.height}px`;
       // Общая трансформация - все координаты будут увеличиваться на dpr, чтобы фигуры рисовались в увеличенном (в физическом) размере
-    //   this.ctx.scale(this.metrics.dpr, this.metrics.dpr);
+      // this.ctx.scale(this.metrics.dpr, this.metrics.dpr);
     }
   };
 
@@ -89,7 +90,7 @@ class Core {
         y2: (this.metrics.height + this.metrics.scrollY) / this.metrics.zoom,
       };
 
-      this.ctx.save();
+      // this.ctx.save();
       // Очистка
       this.ctx.fillStyle = '#ebf4ff';
       this.ctx.fillRect(0, 0, this.metrics.width, this.metrics.height);
@@ -98,11 +99,17 @@ class Core {
       // // scale
       // this.ctx.scale(this.metrics.zoom, this.metrics.zoom);
 
-
-      this.ctx.restore();
-
+      if(this.elements) {
+        for(const element of this.elements) {
+          // this.ctx.save();
+          element.draw(this.ctx)
+          // this.ctx.restore();
+        }
+      }
+      
+      // this.ctx.restore();
       // Цикл рендера
-    //   requestAnimationFrame(this.draw);
+      requestAnimationFrame(this.draw);
     }
   };
 
@@ -122,7 +129,7 @@ class Core {
   }
 
 
-  onMouseDown = (e: MouseEvent) => {
+  onMouseDown = (e: MouseEvent, figure: any = this.figure) => {
     // Курсор с учётом масштабирования и скролла
     const point = {
       x: (e.clientX - this.metrics.left + this.metrics.scrollX) / this.metrics.zoom,
@@ -135,14 +142,22 @@ class Core {
     // this.ctx?.arc(e.clientX, e.clientY, 30, 0, 90)
     // this.ctx?.fill()
 
-    const element = new Figure(e.clientX - this.metrics.left, e.clientY - this.metrics.top, this.elements.width, this.elements.height, this.elements.color)
+    console.log(figure)
 
-    if(this.ctx) {
-        if(!this.elements.radius && !this.elements.tre) element.draw(this.ctx)
-        if(this.elements.radius && !this.elements.tre) element.drawArc(this.ctx)
-        if(this.elements.tre) element.drawTre(this.ctx)
-        if(this.elements.line) element.drawLine(this.ctx)
+    if(figure.type === 'rectangle') {
+
+      this.elements.push(new Figure(e.clientX, e.clientY, figure.width, figure.height, figure.color))
     }
+
+
+
+    
+    // this.elements.forEach((element: any) => {
+    //   console.log(rect)
+    //   if(this.ctx){
+
+    //   }
+    // });
 
 
 

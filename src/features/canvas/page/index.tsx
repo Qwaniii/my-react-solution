@@ -4,7 +4,7 @@ import { memo, useState } from "react"
 
 const DrawPage = () => {
 
-    const [figure, setFigure] = useState()
+    const [figure, setFigure] = useState<any>({})
 
     const elements = [
         {'Красный квадрат ': {width: 100, height: 100, color: 'red'}},
@@ -17,14 +17,27 @@ const DrawPage = () => {
 
     ]
 
+    const rectangle: any = {
+        type: 'rectangle',
+        width: 200,
+        height: 50,
+        color: 'green'
+    };
+
+    const rectangle2: any = {
+        type: 'rectangle',
+        width: 100,
+        height: 100,
+        color: 'black'
+    };
+
 
 
     return (
         <LayoutDraw>
-            {elements.map(rect => (
-                <span style={{ cursor: 'pointer', border: '1px black solid', margin: '2px'}} onClick={() => setFigure(Object.values(rect)[0])}>{Object.keys(rect)}</span>
-            ))}
-            <Draw element={figure}/>
+            <span onClick={() => setFigure( rectangle)}>Квадрат</span>
+            <span onClick={() => setFigure(rectangle2)}>Квадрат2</span>
+            <Draw elements={figure}/>
         </LayoutDraw>
     )
 }

@@ -46,7 +46,6 @@ class Figure {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    
     // Добавление трансформации поворота
     // Смещение origin в центр фигуры
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
