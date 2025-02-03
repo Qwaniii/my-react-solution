@@ -26,8 +26,9 @@ class Core {
   figure: any
 
   constructor(figure: any) {
-    this.figure = figure
+    this.figure= figure
   }
+
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -42,7 +43,7 @@ class Core {
     // // чтобы не ломалась логика, если после нажатия мышь случайна вышла за рамки канвы
     // window.addEventListener('mousemove', this.onMouseMove);
     // window.addEventListener('mouseup', this.onMouseUp);
-    // this.canvas.addEventListener('wheel', this.onMouseWheel);
+    this.canvas.addEventListener('wheel', this.onMouseWheel);
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -67,15 +68,15 @@ class Core {
       this.metrics.height = this.root.offsetHeight;
       this.metrics.dpr = window.devicePixelRatio;
       // Физический размер канвы с учётом плотности пикселей (т.е. канва может быть в разы больше)
-      // this.canvas.width = this.metrics.width * this.metrics.dpr;
-      // this.canvas.height = this.metrics.height * this.metrics.dpr;
-      this.canvas.width = this.metrics.width
-      this.canvas.height = this.metrics.height
+      this.canvas.width = this.metrics.width * this.metrics.dpr;
+      this.canvas.height = this.metrics.height * this.metrics.dpr;
+      // this.canvas.width = this.metrics.width
+      // this.canvas.height = this.metrics.height
       // Фактический размер канвы
       this.canvas.style.width = `${this.metrics.width}px`;
       this.canvas.style.height = `${this.metrics.height}px`;
       // Общая трансформация - все координаты будут увеличиваться на dpr, чтобы фигуры рисовались в увеличенном (в физическом) размере
-      // this.ctx.scale(this.metrics.dpr, this.metrics.dpr);
+      this.ctx.scale(this.metrics.dpr, this.metrics.dpr);
     }
   };
 
@@ -95,18 +96,18 @@ class Core {
       this.ctx.fillStyle = '#ebf4ff';
       this.ctx.fillRect(0, 0, this.metrics.width, this.metrics.height);
       // scroll
-      // this.ctx.translate(-this.metrics.scrollX, -this.metrics.scrollY);
+      this.ctx.translate(-this.metrics.scrollX, -this.metrics.scrollY);
       // // scale
-      // this.ctx.scale(this.metrics.zoom, this.metrics.zoom);
+      this.ctx.scale(this.metrics.zoom, this.metrics.zoom);
 
       if(this.elements) {
         for(const element of this.elements) {
-          // this.ctx.save();
+          this.ctx.save();
           element.draw(this.ctx)
-          // this.ctx.restore();
+          this.ctx.restore();
         }
       }
-      
+
       // this.ctx.restore();
       // Цикл рендера
       requestAnimationFrame(this.draw);
@@ -119,8 +120,8 @@ class Core {
       window.removeEventListener('resize', this.resize);
     //   window.removeEventListener('mousemove', this.onMouseMove);
     //   window.removeEventListener('mouseup', this.onMouseUp);
-    //   this.canvas.removeEventListener('mousedown', this.onMouseDown);
-    //   this.canvas.removeEventListener('wheel', this.onMouseWheel);
+      this.canvas.removeEventListener('mousedown', this.onMouseDown);
+      this.canvas.removeEventListener('wheel', this.onMouseWheel);
       // Удаление канвы
       if (this.root) this.root.removeChild(this.canvas);
       this.canvas = null;
@@ -128,8 +129,57 @@ class Core {
     }
   }
 
+  scroll({ x, y, dx, dy }: any) {
+    if (typeof x != 'undefined') this.metrics.scrollX = x;
+    if (typeof y != 'undefined') this.metrics.scrollY = y;
+    if (typeof dx != 'undefined') this.metrics.scrollX += dx;
+    if (typeof dy != 'undefined') this.metrics.scrollY += dy;
+  }
 
-  onMouseDown = (e: MouseEvent, figure: any = this.figure) => {
+  /**
+   * Установка масштаба
+   * @param zoom Точная установка (1 = 100%)
+   * @param delta Изменение текущего масштаба на коэффициент, например -0.1
+   * @param center Центр масштабирования (точка, которая визуально не сместится)
+   */
+  zoom({ zoom, delta, center }: any) {
+    // Центр масштабирования с учётом текущего смещения и масштабирования
+    const centerReal = {
+      x: (center.x + this.metrics.scrollX) / this.metrics.zoom,
+      y: (center.y + this.metrics.scrollY) / this.metrics.zoom,
+    };
+    // Точная установка масштаба
+    if (typeof zoom != 'undefined') this.metrics.zoom = zoom;
+    // Изменение масштабирования на коэффициент
+    if (typeof delta != 'undefined') this.metrics.zoom += delta * this.metrics.zoom;
+    // Корректировка минимального масштаба
+    this.metrics.zoom = Math.max(0.1, this.metrics.zoom);
+    // Центр масштабирования с учётом нового масштаба
+    const centerNew = {
+      x: centerReal.x * this.metrics.zoom,
+      y: centerReal.y * this.metrics.zoom,
+    };
+    // Корректировка смещения
+    this.scroll({
+      x: centerNew.x - center.x,
+      y: centerNew.y - center.y,
+    });
+  }
+
+  onMouseWheel = (e: WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.1 : -0.1;
+    if (e.ctrlKey) {
+      console.log(e)
+      // Масштабирование
+      this.zoom({ delta, center: { x: e.offsetX, y: e.offsetY } });
+    } else {
+      // Прокрутка по вертикали
+      this.scroll({ dy: delta * 10 });
+    }
+  };
+
+  onMouseDown = (e: MouseEvent) => {
     // Курсор с учётом масштабирования и скролла
     const point = {
       x: (e.clientX - this.metrics.left + this.metrics.scrollX) / this.metrics.zoom,
@@ -142,11 +192,10 @@ class Core {
     // this.ctx?.arc(e.clientX, e.clientY, 30, 0, 90)
     // this.ctx?.fill()
 
-    console.log(figure)
+    console.log(this.figure)
 
-    if(figure.type === 'rectangle') {
-
-      this.elements.push(new Figure(e.clientX, e.clientY, figure.width, figure.height, figure.color))
+    if(this.figure.type === 'rectangle') {
+      this.elements.push(new Figure(point.x, point.y, this.figure.width, this.figure.height, this.figure.color))
     }
 
 

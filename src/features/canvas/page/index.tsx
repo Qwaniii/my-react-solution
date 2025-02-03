@@ -1,43 +1,37 @@
 import LayoutDraw from "@src/ui/layout/layout-draw"
 import Draw from "../components/index"
 import { memo, useState } from "react"
+import { ColorPicker, Flex, Layout, Radio, RadioChangeEvent, Slider, Space } from "antd"
+import { Content } from "antd/es/layout/layout"
 
 const DrawPage = () => {
 
-    const [figure, setFigure] = useState<any>({})
+    const [figure, setFigure] = useState<any>({type: 'rectangle', color: 'black', width: 10, height: 10})
+    const [arc, setFArc] = useState<any>({})
 
-    const elements = [
-        {'Красный квадрат ': {width: 100, height: 100, color: 'red'}},
-        {'Зеленый квадрат': {width: 50, height: 50, color: 'green'}},
-        {'Синий прямоугольник': {width: 10, height: 50, color: 'blue'}},
-        {'Черный квадрат': {width:77, height: 77, color: 'black'}},
-        {'Круг': {start:77, end: 77, color: 'magenta', radius: 10}},
-        {'Треугольник': {width: 10, height: 50, color: 'gray', tre: 'треугольник'}},
-        {'Линия': {width: 1, height: 100, color: 'orange', line: 'линия'}},
+    const callbacks = {
+        onFigure: (e: RadioChangeEvent) => setFigure({...figure, type: e.target.value}),
+        onColor: (value: any) => setFigure({...figure, color: value!.toHexString()}),
+        onSize: (value: number) => setFigure({...figure, width: value, height: value})
+    }
 
-    ]
-
-    const rectangle: any = {
-        type: 'rectangle',
-        width: 200,
-        height: 50,
-        color: 'green'
-    };
-
-    const rectangle2: any = {
-        type: 'rectangle',
-        width: 100,
-        height: 100,
-        color: 'black'
-    };
+    console.log(figure)
 
 
 
     return (
         <LayoutDraw>
-            <span onClick={() => setFigure( rectangle)}>Квадрат</span>
-            <span onClick={() => setFigure(rectangle2)}>Квадрат2</span>
-            <Draw elements={figure}/>
+            <Flex vertical gap="middle">
+                <Radio.Group onChange={callbacks.onFigure} defaultValue="rectangle">
+                    <Radio.Button value="rectangle">Квадрат</Radio.Button>
+                    <Radio.Button value="arc" >Круг</Radio.Button>
+                    <Radio.Button value="tre">Треугольник</Radio.Button>
+                    <Radio.Button value="line">Линия</Radio.Button>
+                </Radio.Group>
+            </Flex>
+                <ColorPicker onChange={callbacks.onColor} defaultValue="#000000" />
+                <Slider onChangeComplete={callbacks.onSize} defaultValue={10} />
+                <Draw elements={figure.type == 'rectangle' ? figure : figure.type == 'arc' || 'line' ? {...figure, radius: figure.height, start: 0, end: Math.PI * 2} : figure.type == 'tre' ? {...figure, line: figure.height} : '' }/>
         </LayoutDraw>
     )
 }
