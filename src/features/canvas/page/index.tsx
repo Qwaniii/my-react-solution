@@ -12,12 +12,15 @@ const DrawPage = () => {
     const callbacks = {
         onFigure: (e: RadioChangeEvent) => setFigure({...figure, type: e.target.value}),
         onColor: (value: any) => setFigure({...figure, color: value!.toHexString()}),
-        onSize: (value: number) => setFigure({...figure, width: value, height: value})
+        onSize: (value: number) => setFigure({...figure, width: value, height: value}),
     }
 
-    console.log(figure)
-
-
+    const options: any = {
+        'rectangle': figure,
+        'arc': {...figure, radius: figure.height, start: 0, end: Math.PI * 2},
+        'tre': {...figure, line: figure.height},
+        'line':  {...figure, radius: figure.height, start: 0, end: Math.PI * 2}
+            }
 
     return (
         <LayoutDraw>
@@ -31,7 +34,7 @@ const DrawPage = () => {
             </Flex>
                 <ColorPicker onChange={callbacks.onColor} defaultValue="#000000" />
                 <Slider onChangeComplete={callbacks.onSize} defaultValue={10} />
-                <Draw elements={figure.type == 'rectangle' ? figure : figure.type == 'arc' || 'line' ? {...figure, radius: figure.height, start: 0, end: Math.PI * 2} : figure.type == 'tre' ? {...figure, line: figure.height} : '' }/>
+                <Draw elements={options[figure.type]}/>
         </LayoutDraw>
     )
 }

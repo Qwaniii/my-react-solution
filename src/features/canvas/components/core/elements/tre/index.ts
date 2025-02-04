@@ -10,6 +10,7 @@ class Triangle extends Figure {
     }
 
     override draw(ctx: CanvasRenderingContext2D): void {
+    
         ctx.beginPath();
         ctx.moveTo(this.x, this.y - this.line);
         ctx.lineTo(this.x  - this.line, this.y);

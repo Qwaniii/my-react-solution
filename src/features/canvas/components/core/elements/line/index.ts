@@ -13,12 +13,11 @@ class Line extends Figure {
     }
 
     override draw(ctx: CanvasRenderingContext2D): void {
+        ctx.lineWidth = this.radius * 2
         ctx.fillStyle = this.color
         ctx.strokeStyle = this.color
-        ctx.lineWidth = this.radius * 2
 
         ctx.lineTo(this.x, this.y)
-        ctx.stroke()
 
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.radius, this.start, this.end)
@@ -26,6 +25,9 @@ class Line extends Figure {
 
         ctx.beginPath()
         ctx.moveTo(this.x, this.y)
+
+
+
     }
 }
 
