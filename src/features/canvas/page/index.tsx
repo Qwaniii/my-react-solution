@@ -19,7 +19,8 @@ const DrawPage = () => {
         'rectangle': figure,
         'arc': {...figure, radius: figure.height, start: 0, end: Math.PI * 2},
         'tre': {...figure, line: figure.height},
-        'line':  {...figure, radius: figure.height, start: 0, end: Math.PI * 2}
+        'line':  {...figure, radius: figure.height, start: 0, end: Math.PI * 2},
+        'clear':  figure
             }
 
     return (
@@ -30,6 +31,7 @@ const DrawPage = () => {
                     <Radio.Button value="arc" >Круг</Radio.Button>
                     <Radio.Button value="tre">Треугольник</Radio.Button>
                     <Radio.Button value="line">Линия</Radio.Button>
+                    <Radio.Button value="clear">Очистить</Radio.Button>
                 </Radio.Group>
             </Flex>
                 <ColorPicker onChange={callbacks.onColor} defaultValue="#000000" />

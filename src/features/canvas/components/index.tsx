@@ -21,8 +21,8 @@ function Draw( {elements}: any) {
   //   return () => core?.unmount();
   // }, [elements]);
 
-  const widthCanvas = 600
-  const heightCanvas = 600
+  const widthCanvas = 1000
+  const heightCanvas = 400
 
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -46,10 +46,18 @@ function Draw( {elements}: any) {
 
       }
       context.restore()
-
-
     }
+
   }, [scale, offset, list]);
+
+  // useEffect(() => {
+  //   if (elements.type === 'clear' ) {
+  //     if(canvas) {
+  //       context.fillStyle = 'white'
+  //       context.fillRect(0, 0, canvas.width, canvas.height);
+  //     }
+  //   }
+  // }, [elements])
 
   const handleWheel = (event: any) => {
     // event.preventDefault();
