@@ -35,29 +35,51 @@ function Draw( {elements}: any) {
   const context = canvas?.getContext('2d');
   const size = canvas?.getBoundingClientRect()
 
+
   useEffect(() => {
     if(canvas) {
+
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save()
       context.translate(offset.x, offset.y);
       context.scale(scale, scale);
       for (const shape of list) {
         shape.draw(context)
-
       }
       context.restore()
     }
-
   }, [scale, offset, list]);
 
-  // useEffect(() => {
-  //   if (elements.type === 'clear' ) {
-  //     if(canvas) {
-  //       context.fillStyle = 'white'
-  //       context.fillRect(0, 0, canvas.width, canvas.height);
-  //     }
-  //   }
-  // }, [elements])
+
+  let start: any
+  
+  const animate = () => {
+       
+    start = requestAnimationFrame(animate);
+
+    // Очищаем канвас
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    // Обновляем каждый круг
+    list.forEach((shape: any) => {
+      shape.update(context, 10, canvas.height);
+    });
+
+}
+
+  useEffect(() => {
+    if(context){
+      if (elements.type === 'play' ) {
+        animate()
+    }
+    if(elements.type == 'clear') {
+      setList([])
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+  }
+  
+
+  }, [elements, start])
 
   const handleWheel = (event: any) => {
     // event.preventDefault();
@@ -93,7 +115,7 @@ function Draw( {elements}: any) {
 
   const handleMouseClick = (event: any) => {
     if(elements.type === 'rectangle') {
-      const rect = new Figure(event.clientX - size.left, event.clientY - size.top, elements.width, elements.height, elements.color)
+      const rect = new Figure(event.clientX - size.left, event.clientY - size.top, elements.width, elements.height, elements.color, 0 , Math.random() * 3)
       setList((prevState: any) => [...prevState, rect])
     }
     else if(elements.type === 'arc') {

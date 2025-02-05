@@ -1,7 +1,8 @@
 import LayoutDraw from "@src/ui/layout/layout-draw"
 import Draw from "../components/index"
 import { memo, useState } from "react"
-import { ColorPicker, Flex, Layout, Radio, RadioChangeEvent, Slider, Space } from "antd"
+import { Button, ColorPicker, Flex, Layout, Radio, RadioChangeEvent, Slider, Space } from "antd"
+import {  CaretRightOutlined, StopFilled } from "@ant-design/icons"
 import { Content } from "antd/es/layout/layout"
 
 const DrawPage = () => {
@@ -20,7 +21,9 @@ const DrawPage = () => {
         'arc': {...figure, radius: figure.height, start: 0, end: Math.PI * 2},
         'tre': {...figure, line: figure.height},
         'line':  {...figure, radius: figure.height, start: 0, end: Math.PI * 2},
-        'clear':  figure
+        'clear':  figure,
+        'play': figure,
+        'stop': figure,
             }
 
     return (
@@ -32,6 +35,8 @@ const DrawPage = () => {
                     <Radio.Button value="tre">Треугольник</Radio.Button>
                     <Radio.Button value="line">Линия</Radio.Button>
                     <Radio.Button value="clear">Очистить</Radio.Button>
+                    <Radio.Button value="play"><CaretRightOutlined style={{color: '#4096ff', width: 80, textAlign: 'center'}} /></Radio.Button>
+                    <Radio.Button value="stop"> <StopFilled /></Radio.Button>
                 </Radio.Group>
             </Flex>
                 <ColorPicker onChange={callbacks.onColor} defaultValue="#000000" />

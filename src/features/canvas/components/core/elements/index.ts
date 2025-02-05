@@ -6,13 +6,17 @@ class Figure {
   width: number = 10;
   height: number = 10;
   color: string = 'black'
+  dx?: number;
+  dy: number
 
-  constructor(x: number = 0, y: number = 0, width: number = 10, height: number = 10, color: string = 'black') {
+  constructor(x: number = 0, y: number = 0, width: number = 10, height: number = 10, color: string = 'black', dx?: number, dy: number = 1) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.color = color
+    this.dx = dx 
+    this.dy = dy
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -24,6 +28,24 @@ class Figure {
     // Rect
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
+
+  }
+
+  update(ctx: CanvasRenderingContext2D, dy: number, height: number) {
+
+        if (this.y + this.height >= height) {
+            // this.dy = -this.dy
+            this.y = height - this.height
+        }
+          // Обновление позиции
+          if (this.y <= height - 250) {
+            this.y += this.dy
+          }         
+          else this.y += this.dy * 10;
+            
+          // Отрисовка 
+          this.draw(ctx);
+      
   }
 
 }
