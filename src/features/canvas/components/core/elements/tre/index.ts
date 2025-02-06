@@ -4,8 +4,8 @@ class Triangle extends Figure {
     line: number = 10
 
 
-    constructor(line: number = 10, x: number = 10, y: number = 10, color: string = 'black') {
-        super(x, y, 0, 0, color)
+    constructor(line: number = 10, x: number = 10, y: number = 10, color: string = 'black', dx: number, dy: number) {
+        super(x, y, 0, 0, color, dx, dy)
         this.line = line
     }
 

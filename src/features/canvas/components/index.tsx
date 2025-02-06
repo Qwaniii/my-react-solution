@@ -59,7 +59,7 @@ function Draw( {elements}: any) {
 
     // Очищаем канвас
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // Обновляем каждый круг
+    // Обновляем каждую фигуру
     list.forEach((shape: any) => {
       shape.update(context, 10, canvas.height);
     });
@@ -115,16 +115,16 @@ function Draw( {elements}: any) {
 
   const handleMouseClick = (event: any) => {
     if(elements.type === 'rectangle') {
-      const rect = new Figure(event.clientX - size.left, event.clientY - size.top, elements.width, elements.height, elements.color, 0 , Math.random() * 3)
+      const rect = new Figure(event.clientX - size.left, event.clientY - size.top, elements.width, elements.height, elements.color, 0 , Math.random() * 10)
       setList((prevState: any) => [...prevState, rect])
     }
     else if(elements.type === 'arc') {
-      const arc = new Circle(elements.radius, elements.start, elements.end, event.clientX - size.left, event.clientY - size.top, elements.color)
+      const arc = new Circle(elements.radius, elements.start, elements.end, event.clientX - size.left, event.clientY - size.top, elements.color, 0 , Math.random() * 5 )
       setList((prevState: any) => [...prevState, arc])
 
     }
     else if(elements.type === 'tre') {
-      const tre = new Triangle(elements.line, event.clientX - size.left, event.clientY - size.top, elements.color)
+      const tre = new Triangle(elements.line, event.clientX - size.left, event.clientY - size.top, elements.color,  0 , Math.random() * 3)
       setList((prevState: any) => [...prevState, tre])
 
     }
@@ -143,7 +143,7 @@ function Draw( {elements}: any) {
     // setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
     // setLastMousePos({ x: event.clientX, y: event.clientY });
     if (elements.type === 'line') {
-      const line = new Line(elements.radius, elements.start, elements.end, event.clientX - size.left, event.clientY - size.top, elements.color)
+      const line = new Line(elements.radius, elements.start, elements.end, event.clientX - size.left, event.clientY - size.top, elements.color,  0 , Math.random())
       setList((prevState: any) => [...prevState, line])
     }
   }

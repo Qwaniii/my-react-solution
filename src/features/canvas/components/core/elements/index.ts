@@ -38,10 +38,7 @@ class Figure {
             this.y = height - this.height
         }
           // Обновление позиции
-          if (this.y <= height - 250) {
             this.y += this.dy
-          }         
-          else this.y += this.dy * 10;
             
           // Отрисовка 
           this.draw(ctx);

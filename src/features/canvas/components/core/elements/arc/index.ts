@@ -5,8 +5,8 @@ class Circle extends Figure {
     start: number = 0
     end: number = Math.PI * 2
 
-    constructor(radius: number = 10, start: number = 0, end: number = Math.PI * 2, x: number = 10, y: number = 10, color: string = 'black') {
-        super(x, y, 0, 0, color)
+    constructor(radius: number = 10, start: number = 0, end: number = Math.PI * 2, x: number = 10, y: number = 10, color: string = 'black', dx: number, dy: number) {
+        super(x, y, 0, 0, color, dx, dy)
         this.radius = radius
         this.start = start 
         this.end = end
