@@ -51,11 +51,10 @@ function Draw( {elements}: any) {
   }, [scale, offset, list]);
 
 
-  let start: any
   
   const animate = () => {
        
-    start = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
     // Очищаем канвас
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -79,7 +78,7 @@ function Draw( {elements}: any) {
   }
   
 
-  }, [elements, start])
+  }, [elements])
 
   const handleWheel = (event: any) => {
     // event.preventDefault();
