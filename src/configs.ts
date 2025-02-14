@@ -21,7 +21,7 @@ export const configs = [
 
   config(LOG_CFG, {
     // По умолчанию для всех
-    enabled: true,
+    enabled: false,
     // Включение именованных логгеров
     'example-name': true,
     // Принудительное отключение для всех (так как в именованных disable не переопределен)
